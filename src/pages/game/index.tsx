@@ -1,121 +1,40 @@
-import { DefeatModal } from "@/components/DefeatModal";
 import { GameTimer } from "@/components/GameTimer";
 import { LifeBar } from "@/components/LifeBar";
 import { QuestionNameToPic } from "@/components/QuestionNameToPic";
 import { QuestionPicToName } from "@/components/QuestionPicToName";
-import { VictoryModal } from "@/components/VictoryModal";
-import { Pokemon } from "@/types/Pokemon";
-import { getPokemons } from "@/utils/getPokemons";
-import { Group, Stack, Text } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { useEffect, useState } from "react";
-
+import { useGamePlay } from "@/hooks/useGameplay";
+import { Group, Stack } from "@mantine/core";
 
 export default function Game() {
-    const initTimer = 10;
-    const [lives, setLives] = useState(3);
-    const [timer, setTimer] = useState(0);
-    const [questionPicker, setQuestionPicker] = useState(Math.random());
-    const [opened, modalHandlers] = useDisclosure();
-    const [isGameOn, setIsGameOn] = useState(false);
-    const [hasWon, setHasWon] = useState(false);
-    const [hasLost, setHasLost] = useState(false);
-    const [isTimerStopped, setIsTimerStopped] = useState(false);
-    const [isAnwsered, setIsAnwsered] = useState(false);
-    const [pokemons, setPokemons] = useState<Pokemon[] | null>(null);
-    const [correctPoke, setCorrectPoke] = useState<Pokemon | null>(null);
-    const [questionNb, setQuestionNb] = useState(1);
-
-    const onAnwser = (pokemon: string) => {
-        if (timer === 0) {
-            return;
-        }
-        setIsTimerStopped(true);
-        setIsAnwsered(true);
-        if (pokemon !== correctPoke!.name) {
-            loseALife();
-        }
-        setTimeout(nextQuestion, 1000);
-    }
-
-    const nextQuestion = () => {
-        setQuestionNb(questionNb + 1);
-        setIsTimerStopped(false);
-        setIsAnwsered(false);
-        setIsGameOn(false);
-        setPokemons(null);
-        setQuestionPicker(Math.random());
-    }
-
-    const timeRanOut = () => {
-        loseALife();
-        nextQuestion();
-    }
-
-    const loseALife = () => {
-        setLives(lives - 1)
-    }
-
-    const onImageLoad = () => {
-        setTimer(initTimer);
-        setIsGameOn(true);
-    }
-
-    useEffect(() => {
-        if (!pokemons) {
-            getPokemons(151).then((data) => {
-                setPokemons(data)
-                setCorrectPoke(data[~~(Math.random() * 4)])
-                console.log(data)
-            });
-        }
-    })
-
-    useEffect(() => {
-        if (!pokemons&&timer===0&&isGameOn) {
-            setTimeout(timeRanOut, 1000);
-        }
-    }, [timer, pokemons])
-
-    useEffect(() => {
-        if (lives === 0) {
-            setHasLost(true);
-            setTimer(-1);
-        }
-        if (questionNb > 20) {
-            setHasWon(true);
-            setTimer(-1);
-        }
-    })
-
+    const {values, handlers} = useGamePlay();
 
     return (
         <>
             <Stack>
                 <Group w="100%" position="apart" align="start">
-                    <LifeBar lives={lives} />
-                    {questionPicker>0.5 ?
+                    <LifeBar lives={values.lives} />
+                    {values.questionPicker>0.5 ?
                     <QuestionPicToName
-                        isAnwsered={isAnwsered}
-                        questionNb={questionNb}
-                        correctPoke={correctPoke}
-                        pokemons={pokemons}
-                        onClick={onAnwser}
-                        onLoad={() => onImageLoad()}
+                        isAnwsered={values.isAnwsered}
+                        questionNb={values.questionNb}
+                        correctPoke={values.correctPoke}
+                        pokemons={values.pokemons}
+                        onClick={handlers.onAnwser}
+                        onLoad={handlers.onImageLoad}
                     />:
                     <QuestionNameToPic 
-                        isAnwsered={isAnwsered}
-                        questionNb={questionNb}
-                        correctPoke={correctPoke}
-                        pokemons={pokemons}
-                        onClick={onAnwser}
-                        onLoad={onImageLoad}
+                        isAnwsered={values.isAnwsered}
+                        questionNb={values.questionNb}
+                        correctPoke={values.correctPoke}
+                        pokemons={values.pokemons}
+                        onClick={handlers.onAnwser}
+                        onLoad={handlers.onImageLoad}
                     />}
                     <GameTimer
-                        timer={timer}
-                        isStopped={isTimerStopped}
-                        initTimer={initTimer}
-                        changeTime={() => setTimer((s) => s - 1)}
+                        timer={values.timer}
+                        isStopped={values.isTimerStopped}
+                        initTimer={values.initTimer}
+                        changeTime={() => handlers.setTimer((s) => (~~((s - 0.1)*10))/10)}
                     />
                 </Group>
             </Stack>
