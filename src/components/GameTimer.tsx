@@ -11,7 +11,7 @@ interface GameTimerProps {
 }
 
 export function GameTimer(props: GameTimerProps) {
-    const interval = useInterval(() => props.changeTime(), 1000);
+    const interval = useInterval(() => props.changeTime(), 100);
 
     const size = 150;
     const padding = 16;
@@ -19,7 +19,7 @@ export function GameTimer(props: GameTimerProps) {
     const center = padding + size / 2;
 
     useEffect(() => {
-        if (props.timer < 1||props.isStopped) {
+        if (props.timer < 0.1||props.isStopped) {
             return interval.stop();
         }
         interval.start();

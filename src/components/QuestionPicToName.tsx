@@ -30,6 +30,7 @@ export function QuestionPicToName(props: QuestionPicToNameProps) {
                     const name = props.pokemons?.[index]?.name;
                     return (
                         <Button 
+                            key={index}
                             color={props.isAnwsered?
                                 (props.pokemons![index].name===props.correctPoke!.name?"green":"red"):
                                 "primary"} 
