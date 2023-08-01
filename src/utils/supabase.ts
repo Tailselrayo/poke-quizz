@@ -3,13 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 const supabase = createClient(process.env.NEXT_PUBLIC_DB_URL, process.env.NEXT_PUBLIC_DB_KEY);
 
 export async function createUser(username: string) {
-    if (await verifyUser(username, false)) {
-        await supabase.from("users").insert({ username });
-        return true
-    }
-    else {
-        return false
-    }
+    await supabase.from("users").insert({ username });
 }
 
 export async function verifyUser(username: string, isLogin: boolean) {

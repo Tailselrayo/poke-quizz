@@ -1,21 +1,27 @@
 import { InformationBox } from '@/components/InformationBox'
+import { LogRegModal } from '@/components/LogRegModal'
 import { ProfilePicture } from '@/components/ProfilePicture'
-import { User } from '@/types/User'
-import { createUser } from '@/utils/supabase'
+import { useLogReg } from '@/hooks/useLogReg'
 import { ActionIcon, Affix, Button, Group, Stack } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { IconLogout, IconUser } from '@tabler/icons-react'
 import Link from 'next/link'
 
 export default function Home() {
-  const [currentUser, setCurrentUser] = useLocalStorage<User|null>({key: "pokemonCurUser", defaultValue: null})
-
-  const handleLogClick = () => {
-    console.log(createUser("Tailselrayo"));
-  }
-
+  const [currentUser] = useLocalStorage({key: "pokemonCurUser"});
+  const {values, logRegHandlers} = useLogReg();
   return (
     <>
+      <LogRegModal
+        opened={values.opened}
+        value={values.value}
+        isLogError={values.isLogError}
+        isRegError={values.isRegError}
+        onClose={logRegHandlers.closeModal}
+        onSubmit={logRegHandlers.onSubmit}
+        setIsLogin={logRegHandlers.setIsLogin}
+        setValue={logRegHandlers.setValue}
+      />
       <Stack p={0}>
         <Group w="100%" position="apart" align="start" p={0}>
           <ProfilePicture size={200} />
@@ -31,11 +37,11 @@ export default function Home() {
           </Group>
         </Stack>
       </Stack>
-      <Affix position={{ right: 0, bottom: 0 }} p="xs">
-        <ActionIcon onClick={handleLogClick} color="yellow" size={50}>
-          {!currentUser?
-          <IconUser color="yellow" size={50} />:
-          <IconLogout color="yellow" size={50}/>}
+      <Affix position={{ right: 0, bottom: 0 }} p="xs" zIndex={1}>
+        <ActionIcon onClick={logRegHandlers.handleLogClick} color="yellow" size={50}>
+          {!currentUser ?
+            <IconUser color="yellow" size={50} /> :
+            <IconLogout color="yellow" size={50} />}
         </ActionIcon>
       </Affix>
     </>
