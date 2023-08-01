@@ -1,4 +1,4 @@
-import { Modal } from "@mantine/core";
+import { Button, Group, Modal } from "@mantine/core";
 
 interface VictoryModalProps {
     opened: boolean;
@@ -13,7 +13,14 @@ export function VictoryModal(props: VictoryModalProps) {
             onClose={props.onClose}
             title="Congrats, you won !"
         >
-
+            <Group>
+                <Button>
+                    Play Again
+                </Button>
+                <Button>
+                    Home
+                </Button>
+            </Group>
         </Modal>
     )
 }
