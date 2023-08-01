@@ -1,6 +1,7 @@
 import { DefeatModal } from "@/components/DefeatModal";
 import { GameTimer } from "@/components/GameTimer";
 import { LifeBar } from "@/components/LifeBar";
+import { QuestionNameToPic } from "@/components/QuestionNameToPic";
 import { QuestionPicToName } from "@/components/QuestionPicToName";
 import { VictoryModal } from "@/components/VictoryModal";
 import { Pokemon } from "@/types/Pokemon";
@@ -14,6 +15,7 @@ export default function Game() {
     const initTimer = 10;
     const [lives, setLives] = useState(3);
     const [timer, setTimer] = useState(0);
+    const [questionPicker, setQuestionPicker] = useState(Math.random());
     const [opened, modalHandlers] = useDisclosure();
     const [isGameOn, setIsGameOn] = useState(false);
     const [hasWon, setHasWon] = useState(false);
@@ -37,12 +39,12 @@ export default function Game() {
     }
 
     const nextQuestion = () => {
-        console.log(pokemons, correctPoke)
         setQuestionNb(questionNb + 1);
         setIsTimerStopped(false);
         setIsAnwsered(false);
-        setTimer(initTimer);
+        setIsGameOn(false);
         setPokemons(null);
+        setQuestionPicker(Math.random());
     }
 
     const timeRanOut = () => {
@@ -78,9 +80,11 @@ export default function Game() {
     useEffect(() => {
         if (lives === 0) {
             setHasLost(true);
+            setTimer(-1);
         }
         if (questionNb > 20) {
             setHasWon(true);
+            setTimer(-1);
         }
     })
 
@@ -90,6 +94,7 @@ export default function Game() {
             <Stack>
                 <Group w="100%" position="apart" align="start">
                     <LifeBar lives={lives} />
+                    {questionPicker>0.5 ?
                     <QuestionPicToName
                         isAnwsered={isAnwsered}
                         questionNb={questionNb}
@@ -97,7 +102,15 @@ export default function Game() {
                         pokemons={pokemons}
                         onClick={onAnwser}
                         onLoad={() => onImageLoad()}
-                    />
+                    />:
+                    <QuestionNameToPic 
+                        isAnwsered={isAnwsered}
+                        questionNb={questionNb}
+                        correctPoke={correctPoke}
+                        pokemons={pokemons}
+                        onClick={onAnwser}
+                        onLoad={onImageLoad}
+                    />}
                     <GameTimer
                         timer={timer}
                         isStopped={isTimerStopped}
@@ -106,8 +119,6 @@ export default function Game() {
                     />
                 </Group>
             </Stack>
-            <VictoryModal opened={hasWon} onClose={modalHandlers.close}/>
-            <DefeatModal opened={hasLost} onClose={modalHandlers.close}/>
         </>
     )
 }
