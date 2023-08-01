@@ -12,10 +12,11 @@ export function useLogReg() {
   
     const onSubmit = async () => {
       if (await verifyUser(value, isLogin)) {
-        createUser(value);
+        if (!isLogin) {
+            createUser(value);
+        }
         setCurrentUser(value);
-        modalHandlers.close();
-        setValue("");
+        closeModal();
       }
       else if (isLogin) {
         setIsLogError(true)
@@ -23,6 +24,11 @@ export function useLogReg() {
       else {
         setIsRegError(true)
       }
+    }
+
+    const closeModal = () => {
+        modalHandlers.close();
+        setValue("");
     }
   
     const resetErrors = () => {
@@ -46,6 +52,6 @@ export function useLogReg() {
 
     return ({
         values: {value, opened, isLogin, isLogError, isRegError},
-        logRegHandlers: {handleLogClick, setValue, closeModal: modalHandlers.close, setIsLogin, onSubmit },
+        logRegHandlers: {handleLogClick, setValue, closeModal, setIsLogin, onSubmit },
     })
 }

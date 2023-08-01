@@ -4,12 +4,12 @@ import { ProfilePicture } from '@/components/ProfilePicture'
 import { useLogReg } from '@/hooks/useLogReg'
 import { ActionIcon, Affix, Button, Group, Stack } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
-import { IconLogout, IconUser } from '@tabler/icons-react'
+import { IconBook, IconLogout, IconUser } from '@tabler/icons-react'
 import Link from 'next/link'
 
 export default function Home() {
-  const [currentUser] = useLocalStorage({key: "pokemonCurUser"});
-  const {values, logRegHandlers} = useLogReg();
+  const [currentUser] = useLocalStorage({ key: "pokemonCurUser" });
+  const { values, logRegHandlers } = useLogReg();
   return (
     <>
       <LogRegModal
@@ -43,6 +43,13 @@ export default function Home() {
             <IconUser color="yellow" size={50} /> :
             <IconLogout color="yellow" size={50} />}
         </ActionIcon>
+      </Affix>
+      <Affix position={{ left: 0, bottom: 0 }} p="xs" zIndex={1}>
+        <Link href="/pokedex">
+          <ActionIcon color="primary" size={50}>
+            <IconBook size={50} />
+          </ActionIcon>
+        </Link>
       </Affix>
     </>
   )

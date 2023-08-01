@@ -7,6 +7,10 @@ export async function createUser(username: string) {
 }
 
 export async function verifyUser(username: string, isLogin: boolean) {
+    //if name too short, insta reject authentification
+    if (username.trim().length<4) {
+        return false;
+    }
     const userData = (await supabase.from("users").select().match({ username })).data;
     //user is trying to login
     if (isLogin) {
