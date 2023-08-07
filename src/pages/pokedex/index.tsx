@@ -5,10 +5,11 @@ import { PokemonWiki } from "@/types/PokemonWiki";
 import { UserInfos } from "@/types/UserInfos";
 import { sumFromNbList } from "@/utils/sumList";
 import { fetchUserPokedex } from "@/utils/supabase";
-import { Affix, Group, Pagination, SimpleGrid, Stack, Tabs, Text } from "@mantine/core";
+import { ActionIcon, Affix, Group, Pagination, SimpleGrid, Stack, Tabs, Text } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
-import { IconQuestionMark } from "@tabler/icons-react";
+import { IconHome2, IconQuestionMark } from "@tabler/icons-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Pokedex() {
@@ -115,6 +116,13 @@ export default function Pokedex() {
                         withEdges={false}
                     />
                 </Stack>
+            </Affix>
+            <Affix position={{ bottom: 0, left: 0 }} p="xs" zIndex="1">
+                <Link href="/">
+                    <ActionIcon color="gray.1" size={40}>
+                        <IconHome2 size={40} />
+                    </ActionIcon>
+                </Link>
             </Affix>
         </>
     )

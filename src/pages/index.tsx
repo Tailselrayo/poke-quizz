@@ -35,6 +35,9 @@ export default function Home() {
             <Button color="tertiary" disabled>Shop</Button>
             <Button color="primary" disabled>Vote</Button>
           </Group>
+          <Link href="/pokedex" style={{ display: "block", width: "100%" }}>
+            <Button w="100%" color="primary">Pokedex</Button>
+          </Link>
         </Stack>
       </Stack>
       <Affix position={{ right: 0, bottom: 0 }} p="xs" zIndex={1}>
@@ -43,13 +46,6 @@ export default function Home() {
             <IconUser color="yellow" size={50} /> :
             <IconLogout color="yellow" size={50} />}
         </ActionIcon>
-      </Affix>
-      <Affix position={{ left: 0, bottom: 0 }} p="xs" zIndex={1}>
-        <Link href="/pokedex">
-          <ActionIcon color="primary" size={50}>
-            <IconBook size={50} />
-          </ActionIcon>
-        </Link>
       </Affix>
     </>
   )
