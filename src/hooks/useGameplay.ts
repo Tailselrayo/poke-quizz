@@ -1,3 +1,4 @@
+import { PokemonData } from "@/types/PokemonData";
 import { Pokemon } from "@/types/Pokemon";
 import { getPokemons } from "@/utils/getPokemons";
 import { useLocalStorage } from "@mantine/hooks";
@@ -8,7 +9,7 @@ export function useGamePlay() {
     //dynamic values
     const [lives, setLives] = useState(3);
     const [timer, setTimer] = useState(0);
-    const [questionPicker, setQuestionPicker] = useState(Math.random());
+    const [questionPicker, setQuestionPicker] = useState(0);
     //dynamic booleans
     const [isGameOn, setIsGameOn] = useState(false);
     const [isTimerStopped, setIsTimerStopped] = useState(false);
@@ -17,7 +18,7 @@ export function useGamePlay() {
     //storage
     const [pokemons, setPokemons] = useState<Pokemon[] | null>(null);
     const [correctPoke, setCorrectPoke] = useState<Pokemon | null>(null);
-    const [anwserSummary, setAnwserSummary] = useLocalStorage<{pokemon: string, score: number}[]>({key: "anwsers", defaultValue: []})
+    const [anwserSummary, setAnwserSummary] = useLocalStorage<PokemonData[]>({key: "anwsers", defaultValue: []})
     
     const [questionNb, setQuestionNb] = useState(1);
     const router = useRouter();
@@ -32,10 +33,10 @@ export function useGamePlay() {
         setIsAnwsered(true);
         if (pokemon !== correctPoke!.name) {
             loseALife();
-            setAnwserSummary(anwserSummary.concat([{pokemon: correctPoke!.name, score: 0}]))
+            setAnwserSummary(anwserSummary.concat([{pokemon: correctPoke!.name, id: correctPoke!.id , score: 0}]))
         }
         else {
-            setAnwserSummary(anwserSummary.concat([{pokemon: correctPoke!.name, score: Math.round(timer*100)}]))
+            setAnwserSummary(anwserSummary.concat([{pokemon: correctPoke!.name, id: correctPoke!.id, score: Math.round(timer*100)}]))
         }
         
         setTimeout(nextQuestion, 1000);

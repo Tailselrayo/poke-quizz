@@ -1,4 +1,4 @@
-import { PokedexSimpleData } from "@/types/PokedexSimpleData";
+import { PokedexSimpleData } from "@/types/PokemonData";
 import { Card, Stack, Text } from "@mantine/core";
 
 interface SummaryCardProps {

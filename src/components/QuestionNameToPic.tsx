@@ -42,8 +42,8 @@ export function QuestionNameToPic(props: QuestionNameToPicProps) {
                                     onLoad={()=>setImagesLoaded((s)=>s+1)}
                                     src={`${process.env.NEXT_PUBLIC_POKESPRITE_URL}${props.pokemons[index].id}.png`}
                                     alt="pokepic"
-                                    width={150}
-                                    height={150}
+                                    width={120}
+                                    height={120}
                                 /> : <></>
                             }
                         </Button>

@@ -41,6 +41,7 @@ export function LogRegModal(props: LogRegModalProps) {
                         </Tabs.List>
                         <Tabs.Panel value="login">
                             <TextInput
+                                className="border"
                                 c="tertiary"
                                 value={props.value}
                                 onChange={(e) => props.setValue(e.target.value)}

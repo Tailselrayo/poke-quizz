@@ -1,16 +1,20 @@
 import { SummaryCard } from "@/components/SummaryCard";
-import { PokedexSimpleData } from "@/types/PokedexSimpleData";
+import { PokemonData } from "@/types/PokemonData";
+import { UserInfos } from "@/types/UserInfos";
+import { addOrUpdatePokedex } from "@/utils/supabase";
 import { Button, Group, SimpleGrid, Stack, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Results() {
-    const [anwserSummary] = useLocalStorage<PokedexSimpleData[]>({ key: "anwsers", defaultValue: [] })
+    const [currentUser] = useLocalStorage<UserInfos|null>({key: "pokemonCurUser", defaultValue: null})
+    const [anwserSummary] = useLocalStorage<PokemonData[]>({ key: "anwsers", defaultValue: [] })
     const [hasLost, setHasLost] = useState<boolean | null>(null);
     const [totalScore, setTotalScore] = useState(0);
+    const [isPokedexUpdated, setIsPokedexUpdated] = useState(false);
 
-    const hasWon = (list: PokedexSimpleData[]) => {
+    const hasWon = (list: PokemonData[]) => {
         let count = 0;
         for (const poke of list) {
             setTotalScore((s) => s + poke.score);
@@ -30,6 +34,15 @@ export default function Results() {
             setHasLost(!hasWon(anwserSummary));
         }
     }, [anwserSummary, hasLost])
+
+    //fill pokedex with data on victory
+    useEffect(()=>{
+        if (currentUser?.id&&hasLost===false&&!isPokedexUpdated) {
+            anwserSummary.forEach(async (data) => {
+                await addOrUpdatePokedex(currentUser.id, data.pokemon, data.id, data.score)
+            })
+        }
+    })
 
     return (
         <Stack spacing={10}>

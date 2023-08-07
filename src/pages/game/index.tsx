@@ -8,6 +8,8 @@ import { Group, Stack } from "@mantine/core";
 export default function Game() {
     const {values, handlers} = useGamePlay();
 
+    console.log(values.questionPicker)  
+
     return (
         <>
             <Stack>

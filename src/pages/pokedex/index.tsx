@@ -1,27 +1,42 @@
 import { ProfilePicture } from "@/components/ProfilePicture";
+import { PokedexCompleteDataProps } from "@/types/PokedexCompleteData";
+import { UserInfos } from "@/types/UserInfos";
 import { sumFromNbList } from "@/utils/sumList";
+import { fetchUserPokedex } from "@/utils/supabase";
 import { Affix, Group, Pagination, SimpleGrid, Stack, Tabs, Text } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Pokedex() {
-    const [currentUser] = useLocalStorage({ key: "pokemonCurUser", defaultValue: "" })
+    const [currentUser] = useLocalStorage<UserInfos|null>({ key: "pokemonCurUser", defaultValue: null})
+    const [pokedex, setPokedex] = useState<PokedexCompleteDataProps[]|null>(null)
     const [selectedGen, setSelectedGen] = useState(1);
     const [selectedPage, setSelectedPage] = useState(1);
 
     const genSizes = [151, 100, 135, 113, 92, 72, 88, 96, 105] //9 generations in
     const pokemonPerPage = 20;
 
+
     //reset pagination selected on gen change
-    useEffect(() => setSelectedPage(1), [selectedGen])
+    useEffect(() => {
+        setSelectedPage(1)
+        console.log(pokedex)
+    }, [selectedGen])
+
+    //fetch all pokedex data for curUser
+    useEffect(()=>{
+        if (currentUser?.id&&!pokedex) {
+            fetchUserPokedex(currentUser.id).then(setPokedex);
+        }
+    },[currentUser, pokedex])
 
     return (
         <>
             <Stack w="100%" spacing={3}>
                 <Group h={100} position="apart">
                     <ProfilePicture size={100} />
-                    <Text className="text-shadow">{currentUser}'s Pokedex</Text>
+                    <Text className="text-shadow">{currentUser?.username}'s Pokedex</Text>
                 </Group>
                 <Tabs defaultValue="g1">
                     <Tabs.List onClick={()=>console.log(genSizes.slice(0,selectedGen-1))}position="center">
