@@ -118,12 +118,12 @@ export default function Pokedex() {
                 </Stack>
             </Affix>
             <Affix position={{ bottom: 0, left: 0 }} p="xs" zIndex="1">
-                        <Link href="/">
-                            <ActionIcon color="gray.1" size={40}>
-                                <IconHome2 size={40} />
-                            </ActionIcon>
-                        </Link>
-                    </Affix>
+                <Link href="/">
+                    <ActionIcon color="gray.1" size={40}>
+                        <IconHome2 size={40} />
+                    </ActionIcon>
+                </Link>
+            </Affix>
         </>
     )
 }
