@@ -9,10 +9,11 @@ import { useEffect, useState } from "react";
 
 export default function Results() {
     const [currentUser] = useLocalStorage<UserInfos|null>({key: "pokemonCurUser", defaultValue: null})
-    const [anwserSummary] = useLocalStorage<PokemonData[]>({ key: "anwsers", defaultValue: [] })
-    const [hasLost, setHasLost] = useState<boolean | null>(null);
+    //Stock data from local storage to hooks to keep the UI updated unless refresh
+    const [anwserSummary, setAnwserSummary] = useLocalStorage<PokemonData[]>({ key: "anwsers", defaultValue: [] })
+    const [anwserStorage, setAnwserStorage] = useState<PokemonData[]>([]);
+    const [hasLost, setHasLost] = useState<boolean>();
     const [totalScore, setTotalScore] = useState(0);
-    const [isPokedexUpdated, setIsPokedexUpdated] = useState(false);
 
     const hasWon = (list: PokemonData[]) => {
         let count = 0;
@@ -30,17 +31,19 @@ export default function Results() {
 
     //getting the outcome of the game
     useEffect(() => {
-        if (anwserSummary.length !== 0 && hasLost === null) {
+        if (anwserSummary.length !== 0 && hasLost === undefined) {
             setHasLost(!hasWon(anwserSummary));
+            setAnwserStorage(anwserSummary);
         }
     }, [anwserSummary, hasLost])
 
     //fill pokedex with data on victory
     useEffect(()=>{
-        if (currentUser?.id&&hasLost===false&&!isPokedexUpdated) {
+        if (currentUser?.id&&hasLost===false&&!anwserStorage.length) {
             anwserSummary.forEach(async (data) => {
                 await addOrUpdatePokedex(currentUser.id, data.pokemon, data.id, data.score)
             })
+            setAnwserSummary([]);
         }
     })
 
@@ -49,7 +52,7 @@ export default function Results() {
             <Title className="text-shadow" ta="center">{!hasLost ? `VICTORY (${totalScore})` : "DEFEAT"} </Title>
             <SimpleGrid cols={4} spacing={20}>
                 {Array.from({ length: 20 }).map((_, index) => {
-                    const cardData = anwserSummary?.[index];
+                    const cardData = anwserStorage?.[index];
                     return (
                         <SummaryCard key={index} data={cardData} cardIndex={index + 1} />
                     )

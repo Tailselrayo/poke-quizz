@@ -11,12 +11,12 @@ export function LifeBar(props: LifeBarProps) {
             {Array.from({ length: 3 }).map((_, index) => {
                 if (index < props.lives) {
                     return (
-                        <IconHeart fill="red" color="red" size={40}/>
+                        <IconHeart key={index} fill="red" color="red" size={40}/>
                     )
                 }
                 else {
                     return (
-                        <IconHeartBroken color="cyan" size={40}/>
+                        <IconHeartBroken key={index} color="cyan" size={40}/>
                     )
                 }
             })

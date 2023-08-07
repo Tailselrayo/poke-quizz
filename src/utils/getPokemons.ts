@@ -8,7 +8,7 @@ export async function getPokemons(limit: number) {
     if (limit < 4) return [];
 
     while (idTab.size < 4){
-        idTab.add(~~(Math.random()*limit))
+        idTab.add(Math.ceil((Math.random()*limit)))
     }
     for (const id of Array.from(idTab)) {
         pokeTab.push(await (await fetch(`${process.env.NEXT_PUBLIC_POKEAPI_URL}${id}`)).json())
