@@ -1,9 +1,10 @@
-import { verifyUser, createUser } from "@/utils/supabase";
+import { UserInfos } from "@/types/UserInfos";
+import { verifyUser, createUser, getUserInfos } from "@/utils/supabase";
 import { useLocalStorage, useDisclosure, useInputState } from "@mantine/hooks";
 import { useState, useEffect } from "react";
 
 export function useLogReg() {
-    const [currentUser, setCurrentUser] = useLocalStorage({ key: "pokemonCurUser", defaultValue: "" })
+    const [currentUser, setCurrentUser] = useLocalStorage<UserInfos|null>({ key: "pokemonCurUser", defaultValue: null })
     const [opened, modalHandlers] = useDisclosure();
     const [value, setValue] = useInputState("")
     const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -12,10 +13,11 @@ export function useLogReg() {
   
     const onSubmit = async () => {
       if (await verifyUser(value, isLogin)) {
-        createUser(value);
-        setCurrentUser(value);
-        modalHandlers.close();
-        setValue("");
+        if (!isLogin) {
+            createUser(value);
+        }
+        setCurrentUser((await getUserInfos(value)).data?.[0]);
+        closeModal();
       }
       else if (isLogin) {
         setIsLogError(true)
@@ -23,6 +25,11 @@ export function useLogReg() {
       else {
         setIsRegError(true)
       }
+    }
+
+    const closeModal = () => {
+        modalHandlers.close();
+        setValue("");
     }
   
     const resetErrors = () => {
@@ -37,7 +44,7 @@ export function useLogReg() {
         modalHandlers.open();
       }
       else {
-        setCurrentUser("")
+        setCurrentUser(null)
       }
     }
   
@@ -46,6 +53,6 @@ export function useLogReg() {
 
     return ({
         values: {value, opened, isLogin, isLogError, isRegError},
-        logRegHandlers: {handleLogClick, setValue, closeModal: modalHandlers.close, setIsLogin, onSubmit },
+        logRegHandlers: {handleLogClick, setValue, closeModal, setIsLogin, onSubmit },
     })
 }

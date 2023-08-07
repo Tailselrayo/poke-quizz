@@ -8,10 +8,10 @@ const theme: any = {
     },
     '.text-shadow': {
       textShadow: `
-        -2px -2px black, 2px -2px black, 2px 2px black, -2px 2px black,
-        -2px 4px black, 0px 4px black, 2px 4px black,
-        -2px 6px black, 0px 6px black, 2px 6px black,
-        -2px 8px black, 0px 8px black, 2px 8px black
+      -2px -2px black, 2px -2px black, 2px 2px black, -2px 2px black,
+      -2px 4px black, 0px 4px black, 2px 4px black,
+      -2px 6px black, 0px 6px black, 2px 6px black,
+      -2px 8px black, 0px 8px black, 2px 8px black
       `,
     },
     '.border': {

@@ -1,3 +1,4 @@
+import { PokemonData } from "@/types/PokemonData";
 import { Pokemon } from "@/types/Pokemon";
 import { getPokemons } from "@/utils/getPokemons";
 import { useLocalStorage } from "@mantine/hooks";
@@ -8,7 +9,7 @@ export function useGamePlay() {
     //dynamic values
     const [lives, setLives] = useState(3);
     const [timer, setTimer] = useState(0);
-    const [questionPicker, setQuestionPicker] = useState(Math.random());
+    const [questionPicker, setQuestionPicker] = useState(0);
     //dynamic booleans
     const [isGameOn, setIsGameOn] = useState(false);
     const [isTimerStopped, setIsTimerStopped] = useState(false);
@@ -17,27 +18,24 @@ export function useGamePlay() {
     //storage
     const [pokemons, setPokemons] = useState<Pokemon[] | null>(null);
     const [correctPoke, setCorrectPoke] = useState<Pokemon | null>(null);
-    const [anwserSummary, setAnwserSummary] = useLocalStorage<{pokemon: string, score: number}[]>({key: "anwsers", defaultValue: []})
-    
+    const [anwserSummary, setAnwserSummary] = useLocalStorage<PokemonData[]>({ key: "anwsers", defaultValue: []})
+
     const [questionNb, setQuestionNb] = useState(1);
     const router = useRouter();
 
     const initTimer = 10;
 
     const onAnwser = (pokemon: string) => {
-        if (timer === 0) {
-            return;
-        }
         setIsTimerStopped(true);
         setIsAnwsered(true);
         if (pokemon !== correctPoke!.name) {
             loseALife();
-            setAnwserSummary(anwserSummary.concat([{pokemon: correctPoke!.name, score: 0}]))
+            setAnwserSummary((summary)=>summary.concat([{ pokemon: correctPoke!.name, id: correctPoke!.id, score: 0 }]))
         }
         else {
-            setAnwserSummary(anwserSummary.concat([{pokemon: correctPoke!.name, score: Math.round(timer*100)}]))
+            setAnwserSummary((summary)=>summary.concat([{ pokemon: correctPoke!.name, id: correctPoke!.id, score: Math.round(timer * 100) }]))
         }
-        
+
         setTimeout(nextQuestion, 1000);
     }
 
@@ -51,8 +49,11 @@ export function useGamePlay() {
     }
 
     const timeRanOut = () => {
-        loseALife();
-        nextQuestion();
+        //if is there to prevent asynchrone setters from activating timer<0.1&&isGameOn
+        if (isGameOn) {
+            loseALife();
+            nextQuestion();
+        }
     }
 
     const loseALife = () => {
@@ -74,31 +75,35 @@ export function useGamePlay() {
         }
     })
 
-    //empty local storage each new game
-    useEffect(()=>{
-        if (anwserSummary.length!==0&&!isStorageCleaned) {
+    //empty local storage at the start of each new game
+    useEffect(() => {
+        console.log(anwserSummary.length)
+        if (anwserSummary.length !== 0 && !isStorageCleaned) {     
             setAnwserSummary([]);
             setIsStorageCleaned(true);
         }
-    },[anwserSummary, isStorageCleaned])
-    
+        else if (isGameOn&&anwserSummary.length===0) {
+            setIsStorageCleaned(true)
+        }
+    }, [anwserSummary, isStorageCleaned, isGameOn])
+
     //check if question ran out of time
     useEffect(() => {
-        if (!pokemons&&timer<0.1&&isGameOn) {
+        if (timer < 0.1 && isGameOn) {
             setTimeout(timeRanOut, 1000);
         }
-    }, [timer, pokemons])
+    }, [timer, isGameOn])
 
     //check for game being completed
     useEffect(() => {
-        if (lives === 0||questionNb>20) {
+        if (lives === 0 || questionNb > 20) {
             setTimer(-1);
             router.push("/game/results");
         }
     }, [lives, questionNb])
 
     return ({
-        values: {lives, timer, questionNb, questionPicker, isTimerStopped, isAnwsered, pokemons, correctPoke, initTimer},
-        handlers: {onAnwser, onImageLoad, setTimer}
+        values: { lives, timer, questionNb, questionPicker, isTimerStopped, isAnwsered, pokemons, correctPoke, initTimer },
+        handlers: { onAnwser, onImageLoad, setTimer }
     })
 }
