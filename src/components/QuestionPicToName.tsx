@@ -32,7 +32,7 @@ export function QuestionPicToName(props: QuestionPicToNameProps) {
                         <Button 
                             key={index}
                             color={props.isAnwsered?
-                                (props.pokemons![index].name===props.correctPoke!.name?"green":"red"):
+                                (props.pokemons![index].name===props.correctPoke!.name?"green2":"red2"):
                                 "primary"} 
                             onClick={() => props.onClick(name!)}
                         >

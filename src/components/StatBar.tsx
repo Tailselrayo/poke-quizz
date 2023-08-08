@@ -15,7 +15,7 @@ export function StatBar(props: StatBarProps) {
         >  
             <Box
                 bg={props.color}
-                w={(props.size??150)*props.value/150}
+                w={(props.size??150)*props.value/120}
                 h="100%"
             >
                 <Text p={0} ta="center" fz={15} c="dark.8">{props.value}</Text>

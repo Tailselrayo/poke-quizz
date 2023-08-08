@@ -10,7 +10,7 @@ export function SummaryCard(props: SummaryCardProps) {
     const data = props.data;
     return (
         <Card 
-            bg={data ? (data.score !== 0 ? "green" : "red") : "rgba(200,200,200,1)"}
+            bg={data ? (data.score !== 0 ? "green2" : "red2") : "rgba(200,200,200,1)"}
             w={250}
             h={60}
             p={0}
