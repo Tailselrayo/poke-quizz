@@ -1,4 +1,4 @@
-import {Box, Progress, Text } from "@mantine/core";
+import {Box,  Text } from "@mantine/core";
 
 interface StatBarProps {
     size?: number;

@@ -1,9 +1,10 @@
 import { PokedexCompleteData } from "@/types/PokedexCompleteData";
 import { PokemonWiki } from "@/types/PokemonWiki";
-import { Group, Modal, Progress, Text, Stack } from "@mantine/core";
+import { Group, Modal, Progress, Text, Stack, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
 import { StatDisplay } from "./StatDisplay";
 import { TypeDisplay } from "./TypeDisplay";
+import { getColorsFromTypes } from "@/utils/getColorsFromTypes";
 
 interface PokedexModalProps {
     opened: boolean;
@@ -15,16 +16,19 @@ interface PokedexModalProps {
 export function PokedexModal(props: PokedexModalProps) {
     const infos = props.pokemonSummary;
     const wiki = props.pokemonWiki;
+    const typeScheme = getColorsFromTypes(props.pokemonWiki.types)
+    const colorTooBright = ["yellow","gray"]
+    const colorTooDark = ["dark"]
 
     return (
         <Modal
             opened={props.opened}
             onClose={props.onClose}
             styles={(theme) => ({
-                content: { backgroundColor: theme.colors.green },
-                header: { backgroundColor: theme.colors.lime, justifyContent: "center" },
+                content: { backgroundColor: theme.colors[`${typeScheme[0]}`][`${typeScheme[2]}`] },
+                header: { backgroundColor: theme.colors[`${typeScheme[0]}`][`${typeScheme[1]}`], justifyContent: "center" },
             })}
-            title={`${infos.pokemon} (${infos["poke-id"]})`}
+            title={<Text color={colorTooDark.includes(typeScheme[0])?"white2":""}>{`${infos.pokemon} (${infos["poke-id"]})`}</Text>}
         >
             <Stack>
                 <Group w="100%" position="apart">
@@ -37,7 +41,10 @@ export function PokedexModal(props: PokedexModalProps) {
                     <TypeDisplay types={wiki.types} />
 
                 </Group>
-                <StatDisplay stats={wiki.stats} />
+                <StatDisplay 
+                    stats={wiki.stats} 
+                    isColorTooBright={colorTooBright.includes(typeScheme[0])}
+                />
             </Stack>
 
         </Modal>

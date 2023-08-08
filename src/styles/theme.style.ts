@@ -15,7 +15,7 @@ const theme: any = {
       `,
     },
     '.border': {
-      border: `8px solid ${t.colors.white[0]}`,
+      border: `8px solid ${t.colors.white2[0]}`,
     },
     ".pointer": {
       cursor: "pointer",
@@ -45,11 +45,11 @@ const theme: any = {
       whiteSpace: 'break-spaces',
     },
     '.mantine-Checkbox-label': {
-      color: t.colors.white[0],
+      color: t.colors.white2[0],
     },
     '.mantine-Input-input': {
       backgroundColor: 'transparent',
-      color: t.colors.white[0],
+      color: t.colors.white2[0],
       border: 0,
       fontSize: t.fontSizes.md,
       padding: `${t.spacing.lg}px ${t.spacing.sm}px`,
@@ -62,7 +62,7 @@ const theme: any = {
     Text: {
       defaultProps: {
         fz: 'sm',
-        color: 'white',
+        color: 'white2',
       },
     },
     Button: {
@@ -80,14 +80,14 @@ const theme: any = {
     fontFamily: 'Gilroy',
     primaryShade: 0,
     colors: {
-      white: ['#FFFFFF'],
-      yellow: ['#FFDE5A'],
-      red: ['#B02C58', '#872C45', '#E94368'],
-      green: ['#2CA189', '#1C876F', '#6A974F'],
-      blue: ['#51B4FC', '#391C68'],
-      indigo: ['#A16DF5'],
-      purple: ['#8357A0', '#5D3F87', '#784187', '#C13FEF'],
-      black: ['#222222'],
+      white2: ['#FFFFFF'],
+      yellow2: ['#FFDE5A'],
+      red2: ['#B02C58', '#872C45', '#E94368'],
+      green2: ['#2CA189', '#1C876F', '#6A974F'],
+      blue2: ['#51B4FC', '#391C68'],
+      indigo2: ['#A16DF5'],
+      purple2: ['#8357A0', '#5D3F87', '#784187', '#C13FEF'],
+      black2: ['#222222'],
       /* Theme */
       primary: ['#51B4FC'],
       secondary: ['#E94368'],
