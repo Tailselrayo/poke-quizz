@@ -1,17 +1,35 @@
+import { ImageSelectModal } from '@/components/ImageSelectModal'
 import { InformationBox } from '@/components/InformationBox'
 import { LogRegModal } from '@/components/LogRegModal'
 import { ProfilePicture } from '@/components/ProfilePicture'
+import { useBadges } from '@/hooks/useBadges'
 import { useLogReg } from '@/hooks/useLogReg'
+import { UserInfos } from '@/types/UserInfos'
 import { ActionIcon, Affix, Button, Group, Stack } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
-import { IconBook, IconLogout, IconUser } from '@tabler/icons-react'
+import { IconLogout, IconUser } from '@tabler/icons-react'
 import Link from 'next/link'
 
+
 export default function Home() {
-  const [currentUser] = useLocalStorage({ key: "pokemonCurUser" });
+  const [currentUser] = useLocalStorage<UserInfos>({ key: "pokemonCurUser" });
+  //hook handling log and reg
   const { values, logRegHandlers } = useLogReg();
+  //hook handling badges
+  const { badges, badgesHandlers } = useBadges()
+
   return (
     <>
+      {badges.userPokedex ?
+        <ImageSelectModal
+          opened={badges.opened}
+          userPokedex={badges.userPokedex}
+          onClose={badgesHandlers.closeBadges}
+          onImageSelect={badgesHandlers.onImageSelect}
+          isAvatar={badges.isAvatarSelected}
+        /> :
+        <></>
+      }
       <LogRegModal
         opened={values.opened}
         value={values.value}
@@ -22,9 +40,14 @@ export default function Home() {
         setIsLogin={logRegHandlers.setIsLogin}
         setValue={logRegHandlers.setValue}
       />
+
       <Stack p={0}>
         <Group w="100%" position="apart" align="start" p={0}>
-          <ProfilePicture size={200} />
+          <ProfilePicture
+            size={200}
+            onBadgeClick={badgesHandlers.onBadgeClick}
+            isOnHome={true}
+            badges={badges.badges} />
           <InformationBox />
         </Group>
         <Stack w="40%" mx="auto" align="center" spacing={2}>

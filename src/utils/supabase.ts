@@ -27,7 +27,7 @@ export async function verifyUser(username: string, isLogin: boolean) {
 }
 
 export async function getUserInfos(user: string) {
-    return await supabase.from("users").select().match({username: user}).limit(1)
+    return (await supabase.from("users").select().match({username: user}))?.data
 }
 
 export async function addOrUpdatePokedex(user: number, pokemon: string, id: number, xp: number) {
@@ -43,4 +43,23 @@ export async function addOrUpdatePokedex(user: number, pokemon: string, id: numb
 export async function fetchUserPokedex(user: number) {
     return (await supabase.from("pokedex").select().match({user}).order("poke-id",{ascending: true}))?.data
 }
+
+export async function addOrUpdateBadge(user: number, pokemon: number, affix: number) {
+    const curData = (await supabase.from("badges").select().match({user, affix_pos: affix}))?.data
+    if (curData&&curData.length) {
+        await supabase.from("badges").update({pokemon_id: pokemon}).match({user, affix_pos: affix})
+    } 
+    else {
+        await supabase.from("badges").insert({user, pokemon_id: pokemon, affix_pos: affix});
+    }
+}
+
+export async function fetchUserBadges(user: number) {
+    return (await supabase.from("badges").select().match({user}).order("affix_pos", {ascending: true}))?.data
+}
+
+export async function updateUserAvatar(user: number, pokemon: number) {
+    await supabase.from("users").update({avatar: pokemon}).match({id: user})
+}
+
 

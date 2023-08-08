@@ -39,7 +39,7 @@ export default function Results() {
 
     //fill pokedex with data on victory
     useEffect(()=>{
-        if (currentUser?.id&&hasLost===false&&!anwserStorage.length) {
+        if (currentUser?.id&&hasLost===false&&anwserSummary.length) {
             anwserSummary.forEach(async (data) => {
                 await addOrUpdatePokedex(currentUser.id, data.pokemon, data.id, data.score)
             })

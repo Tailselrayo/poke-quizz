@@ -1,8 +1,8 @@
-import { PokedexSimpleData } from "@/types/PokemonData";
+import { PokemonData } from "@/types/PokemonData";
 import { Card, Stack, Text } from "@mantine/core";
 
 interface SummaryCardProps {
-    data: PokedexSimpleData | undefined;
+    data: PokemonData | undefined;
     cardIndex: number;
 }
 
