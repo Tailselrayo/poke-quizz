@@ -34,11 +34,10 @@ export function GameTimer(props: GameTimerProps) {
                     const x = index * slice  + Math.PI / 2 + slice;
                     const p = beadSize / 2;
                     return (
-                        <Transition mounted={!(10-index>props.timer)} transition="fade">
+                        <Transition key={index} mounted={!(10-index>props.timer)} transition="fade">
                             {(styles) => (  
                                 <Affix 
                                     style={{...styles}} 
-                                    key={index} 
                                     position={{ right: center + 50 * Math.cos(x) - p, top: center - 50 * Math.sin(x) - p }}
                                 >
                                     {/*<Box w={beadSize} h={beadSize} bg="yellow" ta="center" style={{ borderRadius: 999 }}></Box>*/}
