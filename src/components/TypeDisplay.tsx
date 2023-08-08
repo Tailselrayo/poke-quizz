@@ -14,7 +14,7 @@ export function TypeDisplay(props: TypeDisplayProps) {
             <SimpleGrid cols={~~((typesNb-1)/3)}>
                 {Array.from({length: typesNb-1}).map((_,index)=>{
                     return(
-                        <Image src={`/icons/${props.types[index+1].type.name}.svg`} alt="ticon" width={30} height={30}/>
+                        <Image key={index} src={`/icons/${props.types[index+1].type.name}.svg`} alt="ticon" width={30} height={30}/>
                     )
                 })}
             </SimpleGrid>

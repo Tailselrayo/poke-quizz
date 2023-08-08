@@ -1,5 +1,6 @@
 import { PokedexModal } from "@/components/PokedexModal";
 import { ProfilePicture } from "@/components/ProfilePicture";
+import { useBadges } from "@/hooks/useBadges";
 import { PokedexCompleteData } from "@/types/PokedexCompleteData";
 import { PokemonWiki } from "@/types/PokemonWiki";
 import { UserInfos } from "@/types/UserInfos";
@@ -23,6 +24,8 @@ export default function Pokedex() {
     const [selectedPokeWiki, setSelectedPokeWiki] = useState<PokemonWiki>();
     //pokedex modal handler
     const [opened, modalHandlers] = useDisclosure();
+    //badge handlers
+    const { badges } = useBadges();
 
     const genSizes = [151, 100, 135, 113, 92, 72, 88, 96, 105] //9 generations in
     const pokemonPerPage = 20;
@@ -60,7 +63,10 @@ export default function Pokedex() {
             }
             <Stack w="100%" spacing={3}>
                 <Group h={100} position="apart">
-                    <ProfilePicture size={100} />
+                    <ProfilePicture
+                        size={100}
+                        onBadgeClick={() => { }}
+                        badges={badges.badges} />
                     <Text className="text-shadow">{currentUser?.username}'s Pokedex</Text>
                 </Group>
                 <Tabs defaultValue="g1">
@@ -86,18 +92,16 @@ export default function Pokedex() {
                                     const pokeData = pokedex?.find((pokemon) => pokemon["poke-id"] === pokemonId);
                                     if (pokemonId <= sumFromNbList(genSizes.slice(0, selectedGen))) {
                                         return (
-                                            <>
-                                                {pokeData?.xp ?
-                                                    <Image
-                                                        key={index2}
-                                                        onClick={() => onPokemonClick(pokeData)}
-                                                        src={`${process.env.NEXT_PUBLIC_POKESPRITE_URL}${pokemonId}.png`}
-                                                        alt={`${pokemonId}`}
-                                                        height={100}
-                                                        width={100}
-                                                    /> :
-                                                    <IconQuestionMark key={index2} color="white" size={100} />}
-                                            </>
+                                            pokeData?.xp ?
+                                                <Image
+                                                    key={index2}
+                                                    onClick={() => onPokemonClick(pokeData)}
+                                                    src={`${process.env.NEXT_PUBLIC_POKESPRITE_URL}${pokemonId}.png`}
+                                                    alt={`${pokemonId}`}
+                                                    height={100}
+                                                    width={100}
+                                                /> :
+                                                <IconQuestionMark key={index2} color="white" size={100} />
                                         )
                                     }
                                 })}

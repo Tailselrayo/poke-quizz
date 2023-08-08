@@ -1,6 +1,6 @@
 import { PokedexCompleteData } from "@/types/PokedexCompleteData";
 import { PokemonWiki } from "@/types/PokemonWiki";
-import { Group, Modal, SimpleGrid, Stack } from "@mantine/core";
+import { Group, Modal, Progress, Text, Stack } from "@mantine/core";
 import Image from "next/image";
 import { StatDisplay } from "./StatDisplay";
 import { TypeDisplay } from "./TypeDisplay";
@@ -34,7 +34,7 @@ export function PokedexModal(props: PokedexModalProps) {
                         height={150}
                         width={150}
                     />
-                    <TypeDisplay types={wiki.types}/>
+                    <TypeDisplay types={wiki.types} />
 
                 </Group>
                 <StatDisplay stats={wiki.stats} />

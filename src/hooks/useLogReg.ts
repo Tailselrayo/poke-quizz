@@ -2,6 +2,7 @@ import { UserInfos } from "@/types/UserInfos";
 import { verifyUser, createUser, getUserInfos } from "@/utils/supabase";
 import { useLocalStorage, useDisclosure, useInputState } from "@mantine/hooks";
 import { useState, useEffect } from "react";
+import { useBadges } from "./useBadges";
 
 export function useLogReg() {
     const [currentUser, setCurrentUser] = useLocalStorage<UserInfos|null>({ key: "pokemonCurUser", defaultValue: null })
@@ -10,13 +11,17 @@ export function useLogReg() {
     const [isLogin, setIsLogin] = useState<boolean>(true);
     const [isLogError, setIsLogError] = useState<boolean>(false);
     const [isRegError, setIsRegError] = useState<boolean>(false);
+    //badges hook for update on login change
+    const {badgesHandlers} = useBadges()
   
     const onSubmit = async () => {
       if (await verifyUser(value, isLogin)) {
         if (!isLogin) {
             createUser(value);
         }
-        setCurrentUser((await getUserInfos(value)).data?.[0]);
+        (getUserInfos(value))
+        .then((data)=>setCurrentUser(data?.[0]))
+        setTimeout(()=>badgesHandlers.updateBadge(currentUser!), 1000)
         closeModal();
       }
       else if (isLogin) {

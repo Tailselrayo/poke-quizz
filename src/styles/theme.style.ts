@@ -17,8 +17,10 @@ const theme: any = {
     '.border': {
       border: `8px solid ${t.colors.white[0]}`,
     },
+    ".pointer": {
+      cursor: "pointer",
+    },
     '.mantine-Modal-body': {
-      borderRadius: t.radius.lg,
       height: '100%',
     },
     '.mantine-Modal-overlay': {

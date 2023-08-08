@@ -14,7 +14,7 @@ export function StatDisplay(props: StatDisplayProps) {
                 {Array.from({ length: 3 }).map((_, index) => {
                     const stat = props.stats[index]
                     return (
-                        <StatText name={stat.stat.name} value={stat.base_stat}/>
+                        <StatText key={index} name={stat.stat.name} value={stat.base_stat}/>
                     )
                 })}
             </Stack>
@@ -22,7 +22,7 @@ export function StatDisplay(props: StatDisplayProps) {
                 {Array.from({ length: 3 }).map((_, index) => {
                     const stat = props.stats[index+3]
                     return (
-                        <StatText name={stat.stat.name} value={stat.base_stat}/>
+                        <StatText key={index} name={stat.stat.name} value={stat.base_stat}/>
                     )
                 })}
 
