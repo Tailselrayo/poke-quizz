@@ -1,11 +1,10 @@
 import { PokedexModal } from "@/components/PokedexModal";
 import { ProfilePicture } from "@/components/ProfilePicture";
-import { useBadges } from "@/hooks/useBadges";
 import { useUser } from "@/hooks/useUser";
 import { PokedexCompleteData } from "@/types/PokedexCompleteData";
 import { PokemonWiki } from "@/types/PokemonWiki";
 import { UserInfos } from "@/types/UserInfos";
-import { sumFromNbList } from "@/utils/sumList";
+import { sumNumberList } from "@/utils/sumNumberList";
 import { fetchUserPokedex } from "@/utils/supabase";
 import { ActionIcon, Affix, Group, Pagination, SimpleGrid, Stack, Tabs, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -92,9 +91,9 @@ export default function Pokedex() {
                         <Stack align="center">
                             <SimpleGrid cols={5}>
                                 {Array.from({ length: pokemonPerPage }).map((_, index2) => {
-                                    const pokemonId = index2 + 1 + pokemonPerPage * (selectedPage - 1) + sumFromNbList(genSizes.slice(0, selectedGen - 1))
+                                    const pokemonId = index2 + 1 + pokemonPerPage * (selectedPage - 1) + sumNumberList(genSizes.slice(0, selectedGen - 1))
                                     const pokeData = pokedex?.find((pokemon) => pokemon["poke-id"] === pokemonId);
-                                    if (pokemonId <= sumFromNbList(genSizes.slice(0, selectedGen))) {
+                                    if (pokemonId <= sumNumberList(genSizes.slice(0, selectedGen))) {
                                         return (
                                             pokeData?.xp ?
                                                 <Image

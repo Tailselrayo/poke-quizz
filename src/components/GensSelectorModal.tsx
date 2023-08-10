@@ -36,14 +36,15 @@ export function GensSelectionModal(props: GenSelectorModalProps) {
     return(
         <Modal.Root opened={props.opened} onClose={props.onClose} size="xl">
             <Modal.Overlay opacity={0.8}/>
-            <Modal.Content bg="dark.8">
-                <Modal.Body p="xs">
-                    <Stack>
-                        <Title ta="center">Set the generations you want to play with</Title>
-                        <SimpleGrid cols={3} spacing="xs">
+            <Modal.Content bg="teal.8">
+                <Modal.Body py="sm" px="lg">
+                    <Stack w="100%" align="center">
+                        <Title ta="center">Choose the generations you want to play with</Title>
+                        <SimpleGrid w="100%" cols={3} spacing="xs">
                             {Array.from({length: 9}).map((_,index)=>{
                                 return(
                                     <Button
+                                        key={index}
                                         onClick={()=>onGenClick(index+1)}
                                         color={activeSelection.includes(index+1)?"green":"primary"}
                                     >
@@ -52,7 +53,7 @@ export function GensSelectionModal(props: GenSelectorModalProps) {
                                 )
                             })}
                         </SimpleGrid>
-                        <Group w="100%" grow>
+                        <Group w="100%"  grow>
                             <Button
                                 onClick={onCancel}
                                 color="secondary"
