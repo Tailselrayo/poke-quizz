@@ -11,16 +11,21 @@ import router from 'next/router'
 
 export default function Home() {
   //hook getting user id
-  const {userId} = useUser(()=>{}, ()=>router.push('/'));
+  const {user, userHandlers} = useUser(()=>{}, ()=>router.push('/'));
   //hook handling badges
   const { badges, badgesHandlers } = useBadges()
+
+  const onImageSelect = (id: number) => {
+    badgesHandlers.onImageSelect(id)
+    .then(userHandlers.updateUserInfos);
+  }
 
   const onSignOut = () => {
     signOut();
     router.push("/")
   }
 
-  if (!userId?.length) {
+  if (!user?.userId?.length) {
     return <Loader></Loader>
   }
   return (
@@ -30,7 +35,7 @@ export default function Home() {
           opened={badges.opened}
           userPokedex={badges.userPokedex}
           onClose={badgesHandlers.closeBadges}
-          onImageSelect={badgesHandlers.onImageSelect}
+          onImageSelect={onImageSelect}
           isAvatar={badges.isAvatarSelected}
         /> :
         <></>
@@ -41,7 +46,7 @@ export default function Home() {
             size={200}
             onBadgeClick={badgesHandlers.onBadgeClick}
             isOnHome={true}
-            badges={badges.badges} />
+            userInfos={user.userInfos} />
           <InformationBox />
         </Group>
         <Stack w="40%" mx="auto" align="center" spacing={2}>

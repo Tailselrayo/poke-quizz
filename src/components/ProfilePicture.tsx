@@ -8,27 +8,27 @@ import { UserInfos } from "@/types/UserInfos";
 
 interface ProfilePictureProps {
     isOnHome?: boolean;
-    badges: Badge[] | null;
+    userInfos: UserInfos | null;
     size: number;
     onBadgeClick: (affixIndex: number) => void;
 }
 
 export function ProfilePicture(props: ProfilePictureProps) {
-    const [currentUser] = useLocalStorage<UserInfos|null>({key: "pokemonCurUser", defaultValue: null})
+    const user = props.userInfos;
     const affixMarginY = props.size / 5;
     const iconSize = props.size / 6;
     const padding = 16;
 
     return (
         <Box h={props.size} w={props.size}>
-            <ImagePoke id={currentUser?.avatar??0} src={process.env.NEXT_PUBLIC_POKESPRITE_URL} size={props.size} onClick={()=>props.onBadgeClick(0)}/>
+            <ImagePoke id={user?.avatar??0} src={process.env.NEXT_PUBLIC_POKESPRITE_URL} size={props.size} onClick={()=>props.onBadgeClick(0)}/>
             <ProfileAffixButton
                 left_pad={padding}
                 top_pad={padding + props.size - affixMarginY}
                 iconSize={iconSize}
                 onClick={() => props.onBadgeClick(1)}
                 isOnHome={props.isOnHome}
-                badgePoke={props.badges?.find((badge) => badge.affix_pos === 1)}
+                badgePoke={user?.badge_1}
             />
             <ProfileAffixButton
                 left_pad={padding + (props.size - iconSize) / 2}
@@ -36,7 +36,7 @@ export function ProfilePicture(props: ProfilePictureProps) {
                 iconSize={iconSize}
                 onClick={() => props.onBadgeClick(2)}
                 isOnHome={props.isOnHome}
-                badgePoke={props.badges?.find((badge) => badge.affix_pos === 2)}
+                badgePoke={user?.badge_2}
             />
             <ProfileAffixButton
                 left_pad={padding + props.size - iconSize}
@@ -44,7 +44,7 @@ export function ProfilePicture(props: ProfilePictureProps) {
                 iconSize={iconSize}
                 onClick={() => props.onBadgeClick(3)}
                 isOnHome={props.isOnHome}
-                badgePoke={props.badges?.find((badge) => badge.affix_pos === 3)}
+                badgePoke={user?.badge_3}
             />
         </Box>
     )

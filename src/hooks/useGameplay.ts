@@ -68,7 +68,7 @@ export function useGamePlay() {
     //refill of pokemons each question
     useEffect(() => {
         if (!pokemons) {
-            getPokemons(1000).then((data) => {
+            getPokemons(151).then((data) => {
                 setPokemons(data)
                 setCorrectPoke(data[~~(Math.random() * 4)])
             });

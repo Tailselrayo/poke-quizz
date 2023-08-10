@@ -24,10 +24,11 @@ export async function verifyUser(username: string, isLogin: boolean) {
 }
 
 export async function getUserInfos(user: string) {
-    return (await supabase.from("users").select().match({ username: user }))?.data
+    const data = await supabase.from("users").select().match({ user_id: user })
+    return data.data
 }
 
-export async function addOrUpdatePokedex(user: number, pokemon: string, id: number, xp: number) {
+export async function addOrUpdatePokedex(user: string, pokemon: string, id: number, xp: number) {
     const curData = (await supabase.from("pokedex").select().match({ user, "poke-id": id }))?.data
     if (curData && curData.length) {
         await supabase.from("pokedex").update({ xp: curData[0].xp + xp }).match({ user, "poke-id": id })
@@ -37,26 +38,18 @@ export async function addOrUpdatePokedex(user: number, pokemon: string, id: numb
     }
 }
 
-export async function fetchUserPokedex(user: number) {
+export async function fetchUserPokedex(user: string) {
     return (await supabase.from("pokedex").select().match({ user }).order("poke-id", { ascending: true }))?.data
 }
 
-export async function addOrUpdateBadge(user: number, pokemon: number, affix: number) {
-    const curData = (await supabase.from("badges").select().match({ user, affix_pos: affix }))?.data
-    if (curData && curData.length) {
-        await supabase.from("badges").update({ pokemon_id: pokemon }).match({ user, affix_pos: affix })
-    }
-    else {
-        await supabase.from("badges").insert({ user, pokemon_id: pokemon, affix_pos: affix });
-    }
+export async function updateBadges(user: string, pokemon: number, affix: number) {
+    const property: any = {}
+    property[`badge_${affix}`] = pokemon
+    await supabase.from("users").update(property).match({user_id: user})
 }
 
-export async function fetchUserBadges(user: number) {
-    return (await supabase.from("badges").select().match({ user }).order("affix_pos", { ascending: true }))?.data
-}
-
-export async function updateUserAvatar(user: number, pokemon: number) {
-    await supabase.from("users").update({ avatar: pokemon }).match({ id: user })
+export async function updateUserAvatar(user: string, pokemon: number) {
+    await supabase.from("users").update({ avatar: pokemon }).match({ user_id: user })
 }
 
 export async function signInWithEmail(email: string, password: string) {

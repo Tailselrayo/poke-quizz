@@ -1,14 +1,16 @@
 import { SummaryCard } from "@/components/SummaryCard";
+import { useUser } from "@/hooks/useUser";
 import { PokemonData } from "@/types/PokemonData";
-import { UserInfos } from "@/types/UserInfos";
 import { addOrUpdatePokedex } from "@/utils/supabase";
 import { Button, Group, SimpleGrid, Stack, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Results() {
-    const [currentUser] = useLocalStorage<UserInfos|null>({key: "pokemonCurUser", defaultValue: null})
+    const router = useRouter()
+    const {user} = useUser(()=>{}, ()=>router.push('/'))
     //Stock data from local storage to hooks to keep the UI updated unless refresh
     const [anwserSummary, setAnwserSummary] = useLocalStorage<PokemonData[]>({ key: "anwsers", defaultValue: [] })
     const [anwserStorage, setAnwserStorage] = useState<PokemonData[]>([]);
@@ -39,9 +41,9 @@ export default function Results() {
 
     //fill pokedex with data on victory
     useEffect(()=>{
-        if (currentUser?.id&&hasLost===false&&anwserSummary.length) {
+        if (user?.userId&&hasLost===false&&anwserSummary.length) {
             anwserSummary.forEach(async (data) => {
-                await addOrUpdatePokedex(currentUser.id, data.pokemon, data.id, data.score)
+                await addOrUpdatePokedex(user.userId!, data.pokemon, data.id, data.score)
             })
             setAnwserSummary([]);
         }
