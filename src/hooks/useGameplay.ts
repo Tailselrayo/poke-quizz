@@ -100,7 +100,7 @@ export function useGamePlay() {
             setTimer(-1);
             router.push("/game/results");
         }
-    }, [lives, questionNb])
+    }, [lives, questionNb, router])
 
     return ({
         values: { lives, timer, questionNb, questionPicker, isTimerStopped, isAnwsered, pokemons, correctPoke, initTimer },

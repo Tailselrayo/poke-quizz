@@ -1,48 +1,79 @@
-import { UserInfos } from "@/types/UserInfos";
 import { registerWithEmail, signInWithEmail, signOut } from "@/utils/supabase";
-import { useLocalStorage, useDisclosure, useInputState } from "@mantine/hooks";
-import { useState, useEffect } from "react";
-import { useBadges } from "./useBadges";
+import { useInputState } from "@mantine/hooks";
 import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 export function useLogReg() {
-    const [currentUser, setCurrentUser] = useLocalStorage<UserInfos|null>({ key: "pokemonCurUser", defaultValue: null })
-    const [email, setEmail] = useInputState("")
-    const [username, setUsername] = useInputState("")
-    const [password, setPassword] = useInputState("")
-    const [isLogin, setIsLogin] = useState<boolean>(true);
-    const [isLogError, setIsLogError] = useState<boolean>(false);
-    const [isRegError, setIsRegError] = useState<boolean>(false);
-  
-    const onSubmit = async () => {
-      
-        if (!isLogin) {
-            registerWithEmail("azerty@gmail.com", "Test", "azerty123")
-            //createUser(value);
-        }
-        signInWithEmail("qwerty@gmail.com", "qwerty123")
-      
-      if (isLogin) {
-        setIsLogError(true)
-      }
-      else {
-        setIsRegError(true)
-      }
-    }
-  
-    const resetErrors = () => {
-      if (isLogError || isRegError) {
-        setIsLogError(false);
-        setIsRegError(false);
-      }
-    }
-  
-  
-    //Reset modal errors
-    useEffect(resetErrors,[email, password])
+  const [email, setEmail] = useInputState("")
+  const [username, setUsername] = useInputState("")
+  const [password, setPassword] = useInputState("")
+  const [confirmPassword, setConfirmPassword] = useInputState("");
+  const [arePWEq, setArePWEq] = useState<boolean>(true);
+  const [isPWError, setIsPWError] = useState<boolean>(false);
+  const [isLogError, setIsLogError] = useState<boolean>(false);
+  const [isRegError, setIsRegError] = useState<boolean>(false);
 
-    return ({
-        values: {email, username, password, isLogin, isLogError, isRegError},
-        logRegHandlers: {setEmail, setUsername, setPassword, setIsLogin, onSubmit },
-    })
+  const router = useRouter();
+
+  const onSubmit = async (isLogin?:boolean) => {
+    //check if in register mode
+    if (!isLogin) {
+      if (await regVerification()) {
+        console.log("registration successful")
+      }
+    }
+    else {
+      if (await logVerification()) {
+        router.push('/session')
+      }
+    }
+  }
+
+  //handling of registration possible errors
+  const regVerification =  async () => {
+     //check if pw and cpw are the same
+     if (password.trim().length===0||password!==confirmPassword) {
+      setArePWEq(false);
+      return false;
+    }
+    //check if email as an account already
+    const error = (await registerWithEmail(email, username, password))?.error
+    console.log(error?.message);
+
+    if(error) {
+      setIsRegError(true);
+      return false;
+    }
+    return true;
+  }
+
+  //handlingof login possible errors
+  const logVerification = async () => {
+    //check of email is correct (aka exists) and / or pw is correct
+    const error = (await signInWithEmail(email, password))?.error
+    console.log(error?.message)
+    if (error) {
+      setIsLogError(true);
+      return false;
+    }
+    return true;
+  }
+
+  const resetErrors = () => {
+    if (isLogError || isRegError || isPWError || !arePWEq) {
+      setIsLogError(false);
+      setIsRegError(false);
+      setArePWEq(true);
+      setIsPWError(false);
+    }
+  }
+
+
+  //Reset modal errors
+  useEffect(resetErrors, [email, password, confirmPassword])
+
+  return ({
+    values: { email, username, password,  isLogError, isRegError, arePWEq, confirmPassword, isPWError },
+    logRegHandlers: { setEmail, setUsername, setPassword,  onSubmit, setConfirmPassword },
+  })
 }

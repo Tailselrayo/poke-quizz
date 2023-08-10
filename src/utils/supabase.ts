@@ -60,11 +60,10 @@ export async function updateUserAvatar(user: number, pokemon: number) {
 }
 
 export async function signInWithEmail(email: string, password: string) {
-    const data = (await supabase.auth.signInWithPassword({
+    return (await supabase.auth.signInWithPassword({
         email,
         password,
     }))
-    console.log(data?.data)
 }
 
 export async function registerWithEmail(email: string, username: string, password: string) {
@@ -75,11 +74,16 @@ export async function registerWithEmail(email: string, username: string, passwor
     if (data?.data) {
         await supabase.from("users").insert({ username, user_id: data.data.user?.id });
     }
-
+    return data;
 }
 
 export async function signOut() {
     await supabase.auth.signOut();
 }
 
-
+export async function getUser() {
+     const data = await supabase.auth.getUser()
+     if (!data?.error) {
+        return(data.data)
+     }
+}

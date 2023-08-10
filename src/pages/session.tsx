@@ -2,34 +2,27 @@ import { ImageSelectModal } from '@/components/ImageSelectModal'
 import { InformationBox } from '@/components/InformationBox'
 import { ProfilePicture } from '@/components/ProfilePicture'
 import { useBadges } from '@/hooks/useBadges'
-import { useLogReg } from '@/hooks/useLogReg'
-import { UserInfos } from '@/types/UserInfos'
-import { ActionIcon, Affix, Button, Group, Stack } from '@mantine/core'
-import { useLocalStorage } from '@mantine/hooks'
-import { Session, createPagesServerClient } from '@supabase/auth-helpers-nextjs'
-import { IconLogout, IconUser } from '@tabler/icons-react'
-import { GetServerSidePropsContext } from 'next'
+import { useUser } from '@/hooks/useUser'
+import { signOut } from '@/utils/supabase'
+import { ActionIcon, Affix, Button, Group, Loader, Stack } from '@mantine/core'
+import { IconLogout } from '@tabler/icons-react'
 import Link from 'next/link'
+import router from 'next/router'
 
-interface HomeProps {
-  initialSession: Session|null;
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const supabase = createPagesServerClient(context)
-  const data = await supabase.auth.getSession()
-  return ({
-    props: {
-      initialSession: data,
-    }
-  })
-}
-
-export default function Home(props: HomeProps) {
-  const [currentUser] = useLocalStorage<UserInfos>({ key: "pokemonCurUser" });
+export default function Home() {
+  //hook getting user id
+  const {userId} = useUser(()=>{}, ()=>router.push('/'));
   //hook handling badges
   const { badges, badgesHandlers } = useBadges()
 
+  const onSignOut = () => {
+    signOut();
+    router.push("/")
+  }
+
+  if (!userId?.length) {
+    return <Loader></Loader>
+  }
   return (
     <>
       {badges.userPokedex ?
@@ -65,7 +58,7 @@ export default function Home(props: HomeProps) {
         </Stack>
       </Stack>
       <Affix position={{ right: 0, bottom: 0 }} p="xs" zIndex={1}>
-        <ActionIcon onClick={()=>{}} color="yellow" size={50}>
+        <ActionIcon onClick={onSignOut} color="yellow" size={50}>
             <IconLogout color="yellow" size={50} />
         </ActionIcon>
       </Affix>

@@ -9,26 +9,23 @@ import { useEffect, useState } from 'react'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [timer, setTimer] = useState(0);
-  const [supabaseClient] = useState(()=>createPagesBrowserClient())
   const interval = useInterval(() => setTimer((s) => s + 1), 1000);
 
   useEffect(() => interval.start(), [interval]);
 
   return (
-    <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
-      <AppShell style={{ backdropFilter: `blur(2px) brightness(50%) hue-rotate(${timer}deg)` }}>
-        <MantineProvider theme={theme}>
-          <Global styles={[
-            {
-              '@font-face': {
-                fontFamily: 'Gilroy',
-                src: 'url("/Gilroy-Bold.ttf") format("truetype")',
-              },
+    <AppShell style={{ backdropFilter: `blur(2px) brightness(50%) hue-rotate(${timer}deg)` }}>
+      <MantineProvider theme={theme}>
+        <Global styles={[
+          {
+            '@font-face': {
+              fontFamily: 'Gilroy',
+              src: 'url("/Gilroy-Bold.ttf") format("truetype")',
             },
-          ]} />
-          <Component {...pageProps} />
-        </MantineProvider>
-      </AppShell>
-    </SessionContextProvider>
+          },
+        ]} />
+        <Component {...pageProps} />
+      </MantineProvider>
+    </AppShell>
   )
 }
