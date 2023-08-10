@@ -20,7 +20,7 @@ export default function Game() {
                         correctPoke={values.correctPoke}
                         pokemons={values.pokemons}
                         onClick={handlers.onAnwser}
-                        onLoad={handlers.onImageLoad}
+                        isOnBreak={values.isOnBreak}
                     />:
                     <QuestionNameToPic 
                         isAnwsered={values.isAnwsered}
@@ -28,13 +28,11 @@ export default function Game() {
                         correctPoke={values.correctPoke}
                         pokemons={values.pokemons}
                         onClick={handlers.onAnwser}
-                        onLoad={handlers.onImageLoad}
+                        isOnBreak={values.isOnBreak}
                     />}
                     <GameTimer
                         timer={values.timer}
-                        isStopped={values.isTimerStopped}
                         initTimer={values.initTimer}
-                        changeTime={() => handlers.setTimer((s) => (~~((s - 0.1)*10))/10)}
                     />
                 </Group>
             </Stack>
