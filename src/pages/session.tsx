@@ -1,3 +1,4 @@
+import { GensSelectionModal } from '@/components/GensSelectorModal'
 import { ImageSelectModal } from '@/components/ImageSelectModal'
 import { InformationBox } from '@/components/InformationBox'
 import { ProfilePicture } from '@/components/ProfilePicture'
@@ -5,11 +6,15 @@ import { useBadges } from '@/hooks/useBadges'
 import { useUser } from '@/hooks/useUser'
 import { signOut } from '@/utils/supabase'
 import { ActionIcon, Affix, Button, Group, Loader, Stack } from '@mantine/core'
-import { IconLogout } from '@tabler/icons-react'
+import { useDisclosure, useLocalStorage } from '@mantine/hooks'
+import { IconLogout, IconSettings } from '@tabler/icons-react'
 import Link from 'next/link'
 import router from 'next/router'
 
 export default function Home() {
+  //store difficulty selection
+  const [selectedGens, setSelectedGens] = useLocalStorage<number[]>({key: "genStorage", defaultValue: [1]})
+  const [opened, modalHandlers] = useDisclosure();
   //hook getting user id
   const {user, userHandlers} = useUser(()=>{}, ()=>router.push('/'));
   //hook handling badges
@@ -21,8 +26,8 @@ export default function Home() {
   }
 
   const onSignOut = () => {
-    signOut();
-    router.push("/")
+    signOut()
+    .then(()=>router.push("/"))
   }
 
   if (!user?.userId?.length) {
@@ -40,6 +45,12 @@ export default function Home() {
         /> :
         <></>
       }
+      <GensSelectionModal 
+        opened={opened}
+        curSelection={selectedGens}
+        onClose={modalHandlers.close}
+        onSave={setSelectedGens}
+      />
       <Stack p={0}>
         <Group w="100%" position="apart" align="start" p={0}>
           <ProfilePicture
@@ -65,6 +76,11 @@ export default function Home() {
       <Affix position={{ right: 0, bottom: 0 }} p="xs" zIndex={1}>
         <ActionIcon onClick={onSignOut} color="yellow" size={50}>
             <IconLogout color="yellow" size={50} />
+        </ActionIcon>
+      </Affix>
+      <Affix position={{ left: 0, bottom: 0 }} p="xs" zIndex={1}>
+        <ActionIcon onClick={modalHandlers.open} color="white" size={50}>
+            <IconSettings color="white " size={50} />
         </ActionIcon>
       </Affix>
     </>

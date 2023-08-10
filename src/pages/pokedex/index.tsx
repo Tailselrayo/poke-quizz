@@ -48,7 +48,7 @@ export default function Pokedex() {
 
     //set currentUser and pokedex
     useEffect(() => {
-        if (user?.userId?.length && !pokedex && !currentUser) {
+        if (user.userId?.length&& user.userInfos && !pokedex && !currentUser) {
             fetchUserPokedex(user.userId).then(setPokedex);
             setCurrentUser(user.userInfos);
         }
