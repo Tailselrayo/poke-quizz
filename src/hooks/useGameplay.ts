@@ -15,7 +15,8 @@ export function useGamePlay() {
     const [isTimerStopped, setIsTimerStopped] = useState(false);
     const [isAnwsered, setIsAnwsered] = useState(false);
     const [isStorageCleaned, setIsStorageCleaned] = useState(false);
-    //storage
+    //storage & setups
+    const [selectedGens] = useLocalStorage<number[]|null>({key: "genStorage", defaultValue: null})
     const [pokemons, setPokemons] = useState<Pokemon[] | null>(null);
     const [correctPoke, setCorrectPoke] = useState<Pokemon | null>(null);
     const [anwserSummary, setAnwserSummary] = useLocalStorage<PokemonData[]>({ key: "anwsers", defaultValue: []})
@@ -67,13 +68,13 @@ export function useGamePlay() {
 
     //refill of pokemons each question
     useEffect(() => {
-        if (!pokemons) {
-            getPokemons(151).then((data) => {
+        if (!pokemons&&selectedGens) {
+            getPokemons(selectedGens).then((data) => {
                 setPokemons(data)
                 setCorrectPoke(data[~~(Math.random() * 4)])
             });
         }
-    })
+    }, [pokemons, selectedGens])
 
     //empty local storage at the start of each new game
     useEffect(() => {

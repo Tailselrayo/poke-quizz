@@ -1,8 +1,6 @@
-import { Avatar, Box } from "@mantine/core";
+import { Box } from "@mantine/core";
 import { ProfileAffixButton } from "./ProfileAffixButton";
-import { Badge } from "@/types/Badge";
 import { ImagePoke } from "./ImagePoke";
-import { useLocalStorage } from "@mantine/hooks";
 import { UserInfos } from "@/types/UserInfos";
 
 
