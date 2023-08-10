@@ -14,6 +14,14 @@ const theme: any = {
       -2px 8px black, 0px 8px black, 2px 8px black
       `,
     },
+    '.logreg-text-input': {
+      border: 0,
+      label: {
+        color: t.colors.white2[0],
+        fz: "xs",
+        ta: "left",
+      },
+    },
     '.border': {
       border: `8px solid ${t.colors.white2[0]}`,
     },
@@ -22,6 +30,9 @@ const theme: any = {
     },
     '.mantine-Modal-body': {
       height: '100%',
+    },
+    '.mantine-PasswordInput-visibilityToggle' : {
+      color: t.colors.black2[0],
     },
     '.mantine-Modal-overlay': {
       opacity: 0.85,
@@ -46,16 +57,6 @@ const theme: any = {
     },
     '.mantine-Checkbox-label': {
       color: t.colors.white2[0],
-    },
-    '.mantine-Input-input': {
-      backgroundColor: 'transparent',
-      color: t.colors.white2[0],
-      border: 0,
-      fontSize: t.fontSizes.md,
-      padding: `${t.spacing.lg}px ${t.spacing.sm}px`,
-    },
-    '.mantine-Input-input:focus': {
-      border: 0,
     },
   }),
   components: {

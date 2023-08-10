@@ -1,14 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(process.env.NEXT_PUBLIC_DB_URL, process.env.NEXT_PUBLIC_DB_KEY);
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
-export async function createUser(username: string) {
-    await supabase.from("users").insert({ username });
-}
 
 export async function verifyUser(username: string, isLogin: boolean) {
     //if name too short, insta reject authentification
-    if (username.trim().length<4) {
+    if (username.trim().length < 4) {
         return false;
     }
     const userData = (await supabase.from("users").select().match({ username })).data;
@@ -27,39 +24,59 @@ export async function verifyUser(username: string, isLogin: boolean) {
 }
 
 export async function getUserInfos(user: string) {
-    return (await supabase.from("users").select().match({username: user}))?.data
+    const data = await supabase.from("users").select().match({ user_id: user })
+    return data.data
 }
 
-export async function addOrUpdatePokedex(user: number, pokemon: string, id: number, xp: number) {
-    const curData = (await supabase.from("pokedex").select().match({user, "poke-id": id}))?.data
-    if (curData&&curData.length) {
-        await supabase.from("pokedex").update({xp: curData[0].xp + xp}).match({user, "poke-id": id})
-    } 
+export async function addOrUpdatePokedex(user: string, pokemon: string, id: number, xp: number) {
+    const curData = (await supabase.from("pokedex").select().match({ user, "poke-id": id }))?.data
+    if (curData && curData.length) {
+        await supabase.from("pokedex").update({ xp: curData[0].xp + xp }).match({ user, "poke-id": id })
+    }
     else {
-        await supabase.from("pokedex").insert({user, pokemon, "poke-id": id, xp});
+        await supabase.from("pokedex").insert({ user, pokemon, "poke-id": id, xp });
     }
 }
 
-export async function fetchUserPokedex(user: number) {
-    return (await supabase.from("pokedex").select().match({user}).order("poke-id",{ascending: true}))?.data
+export async function fetchUserPokedex(user: string) {
+    return (await supabase.from("pokedex").select().match({ user }).order("poke-id", { ascending: true }))?.data
 }
 
-export async function addOrUpdateBadge(user: number, pokemon: number, affix: number) {
-    const curData = (await supabase.from("badges").select().match({user, affix_pos: affix}))?.data
-    if (curData&&curData.length) {
-        await supabase.from("badges").update({pokemon_id: pokemon}).match({user, affix_pos: affix})
-    } 
-    else {
-        await supabase.from("badges").insert({user, pokemon_id: pokemon, affix_pos: affix});
+export async function updateBadges(user: string, pokemon: number, affix: number) {
+    const property: any = {}
+    property[`badge_${affix}`] = pokemon
+    await supabase.from("users").update(property).match({user_id: user})
+}
+
+export async function updateUserAvatar(user: string, pokemon: number) {
+    await supabase.from("users").update({ avatar: pokemon }).match({ user_id: user })
+}
+
+export async function signInWithEmail(email: string, password: string) {
+    return (await supabase.auth.signInWithPassword({
+        email,
+        password,
+    }))
+}
+
+export async function registerWithEmail(email: string, username: string, password: string) {
+    const data = await supabase.auth.signUp({
+        email,
+        password,
+    })
+    if (data?.data) {
+        await supabase.from("users").insert({ username, user_id: data.data.user?.id });
     }
+    return data;
 }
 
-export async function fetchUserBadges(user: number) {
-    return (await supabase.from("badges").select().match({user}).order("affix_pos", {ascending: true}))?.data
+export async function signOut() {
+    await supabase.auth.signOut();
 }
 
-export async function updateUserAvatar(user: number, pokemon: number) {
-    await supabase.from("users").update({avatar: pokemon}).match({id: user})
+export async function getUser() {
+     const data = await supabase.auth.getUser()
+     if (!data?.error) {
+        return(data.data)
+     }
 }
-
-

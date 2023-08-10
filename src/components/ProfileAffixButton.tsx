@@ -1,11 +1,10 @@
 import { Affix } from "@mantine/core";
 import { PlusIcon } from "./PlusIcon";
 import { ImagePoke } from "./ImagePoke";
-import { Badge } from "@/types/Badge";
 
 interface ProfileAffixButtonProps {
     isOnHome?: boolean;
-    badgePoke?: Badge;
+    badgePoke: number|undefined;
     left_pad: number;
     top_pad: number;
     iconSize: number;
@@ -28,7 +27,7 @@ export function ProfileAffixButton(props: ProfileAffixButtonProps) {
             zIndex={1}
         >
             {props.badgePoke ?
-                <ImagePoke id={props.badgePoke.pokemon_id} src={process.env.NEXT_PUBLIC_BADGESPRITE_URL} size={props.iconSize}/> :
+                <ImagePoke id={props.badgePoke} src={process.env.NEXT_PUBLIC_BADGESPRITE_URL} size={props.iconSize}/> :
                 <PlusIcon size={props.iconSize} />
             }
         </Affix>

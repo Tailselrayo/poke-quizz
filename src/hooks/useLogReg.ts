@@ -1,63 +1,79 @@
-import { UserInfos } from "@/types/UserInfos";
-import { verifyUser, createUser, getUserInfos } from "@/utils/supabase";
-import { useLocalStorage, useDisclosure, useInputState } from "@mantine/hooks";
+import { registerWithEmail, signInWithEmail, signOut } from "@/utils/supabase";
+import { useInputState } from "@mantine/hooks";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { useBadges } from "./useBadges";
 
 export function useLogReg() {
-    const [currentUser, setCurrentUser] = useLocalStorage<UserInfos|null>({ key: "pokemonCurUser", defaultValue: null })
-    const [opened, modalHandlers] = useDisclosure();
-    const [value, setValue] = useInputState("")
-    const [isLogin, setIsLogin] = useState<boolean>(true);
-    const [isLogError, setIsLogError] = useState<boolean>(false);
-    const [isRegError, setIsRegError] = useState<boolean>(false);
-    //badges hook for update on login change
-    const {badgesHandlers} = useBadges()
-  
-    const onSubmit = async () => {
-      if (await verifyUser(value, isLogin)) {
-        if (!isLogin) {
-            createUser(value);
-        }
-        (getUserInfos(value))
-        .then((data)=>setCurrentUser(data?.[0]))
-        setTimeout(()=>badgesHandlers.updateBadge(currentUser!), 1000)
-        closeModal();
-      }
-      else if (isLogin) {
-        setIsLogError(true)
-      }
-      else {
-        setIsRegError(true)
-      }
-    }
+  const [email, setEmail] = useInputState("")
+  const [username, setUsername] = useInputState("")
+  const [password, setPassword] = useInputState("")
+  const [confirmPassword, setConfirmPassword] = useInputState("");
+  const [arePWEq, setArePWEq] = useState<boolean>(true);
+  const [isPWError, setIsPWError] = useState<boolean>(false);
+  const [isLogError, setIsLogError] = useState<boolean>(false);
+  const [isRegError, setIsRegError] = useState<boolean>(false);
 
-    const closeModal = () => {
-        modalHandlers.close();
-        setValue("");
-    }
-  
-    const resetErrors = () => {
-      if (isLogError || isRegError) {
-        setIsLogError(false);
-        setIsRegError(false);
-      }
-    }
-  
-    const handleLogClick = () => {
-      if (!currentUser) {
-        modalHandlers.open();
-      }
-      else {
-        setCurrentUser(null)
-      }
-    }
-  
-    //Reset modal errors
-    useEffect(resetErrors,[value])
+  const router = useRouter();
 
-    return ({
-        values: {value, opened, isLogin, isLogError, isRegError},
-        logRegHandlers: {handleLogClick, setValue, closeModal, setIsLogin, onSubmit },
-    })
+  const onSubmit = async (isLogin?:boolean) => {
+    //check if in register mode
+    if (!isLogin) {
+      if (await regVerification()) {
+        console.log("registration successful")
+      }
+    }
+    else {
+      if (await logVerification()) {
+        router.push('/session')
+      }
+    }
+  }
+
+  //handling of registration possible errors
+  const regVerification =  async () => {
+     //check if pw and cpw are the same
+     if (password.trim().length===0||password!==confirmPassword) {
+      setArePWEq(false);
+      return false;
+    }
+    //check if email as an account already
+    const error = (await registerWithEmail(email, username, password))?.error
+    console.log(error?.message);
+
+    if(error) {
+      setIsRegError(true);
+      return false;
+    }
+    return true;
+  }
+
+  //handlingof login possible errors
+  const logVerification = async () => {
+    //check of email is correct (aka exists) and / or pw is correct
+    const error = (await signInWithEmail(email, password))?.error
+    console.log(error?.message)
+    if (error) {
+      setIsLogError(true);
+      return false;
+    }
+    return true;
+  }
+
+  const resetErrors = () => {
+    if (isLogError || isRegError || isPWError || !arePWEq) {
+      setIsLogError(false);
+      setIsRegError(false);
+      setArePWEq(true);
+      setIsPWError(false);
+    }
+  }
+
+
+  //Reset modal errors
+  useEffect(resetErrors, [email, password, confirmPassword])
+
+  return ({
+    values: { email, username, password,  isLogError, isRegError, arePWEq, confirmPassword, isPWError },
+    logRegHandlers: { setEmail, setUsername, setPassword,  onSubmit, setConfirmPassword },
+  })
 }

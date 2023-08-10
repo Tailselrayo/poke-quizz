@@ -1,20 +1,25 @@
 import { PokedexModal } from "@/components/PokedexModal";
 import { ProfilePicture } from "@/components/ProfilePicture";
 import { useBadges } from "@/hooks/useBadges";
+import { useUser } from "@/hooks/useUser";
 import { PokedexCompleteData } from "@/types/PokedexCompleteData";
 import { PokemonWiki } from "@/types/PokemonWiki";
 import { UserInfos } from "@/types/UserInfos";
 import { sumFromNbList } from "@/utils/sumList";
 import { fetchUserPokedex } from "@/utils/supabase";
 import { ActionIcon, Affix, Group, Pagination, SimpleGrid, Stack, Tabs, Text } from "@mantine/core";
-import { useDisclosure, useLocalStorage } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { IconHome2, IconQuestionMark } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Pokedex() {
-    const [currentUser] = useLocalStorage<UserInfos | null>({ key: "pokemonCurUser", defaultValue: null })
+    const router = useRouter()
+    //get userData
+    const {user} = useUser(()=>{}, ()=>router.push('/'))
+    const [currentUser, setCurrentUser] = useState<UserInfos|null>(null);
     const [pokedex, setPokedex] = useState<PokedexCompleteData[] | null>(null)
     //Dynamic refresh
     const [selectedGen, setSelectedGen] = useState(1);
@@ -24,9 +29,7 @@ export default function Pokedex() {
     const [selectedPokeWiki, setSelectedPokeWiki] = useState<PokemonWiki>();
     //pokedex modal handler
     const [opened, modalHandlers] = useDisclosure();
-    //badge handlers
-    const { badges } = useBadges();
-
+    
     const genSizes = [151, 100, 135, 113, 92, 72, 88, 96, 105] //9 generations in
     const pokemonPerPage = 20;
 
@@ -41,15 +44,15 @@ export default function Pokedex() {
     //reset pagination selected on gen change
     useEffect(() => {
         setSelectedPage(1)
-        console.log(pokedex)
     }, [selectedGen])
 
-    //fetch all pokedex data for curUser
+    //set currentUser and pokedex
     useEffect(() => {
-        if (currentUser?.id && !pokedex) {
-            fetchUserPokedex(currentUser.id).then(setPokedex);
+        if (user?.userId?.length && !pokedex && !currentUser) {
+            fetchUserPokedex(user.userId).then(setPokedex);
+            setCurrentUser(user.userInfos);
         }
-    }, [currentUser, pokedex])
+    }, [currentUser, pokedex, user])
 
     return (
         <>
@@ -66,7 +69,8 @@ export default function Pokedex() {
                     <ProfilePicture
                         size={100}
                         onBadgeClick={() => { }}
-                        badges={badges.badges} />
+                        userInfos={currentUser} 
+                    />
                     <Text className="text-shadow">{currentUser?.username}'s Pokedex</Text>
                 </Group>
                 <Tabs defaultValue="g1">
