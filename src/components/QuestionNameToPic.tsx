@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 
 interface QuestionNameToPicProps {
     isAnwsered?: boolean;
+    isOnBreak: boolean;
     questionNb: number;
     correctPoke: Pokemon | null;
     pokemons: Pokemon[] | null;
     onClick: (pokemon: string) => void;
-    onLoad: () => void;
 }
 
 export function QuestionNameToPic(props: QuestionNameToPicProps) {
@@ -18,7 +18,6 @@ export function QuestionNameToPic(props: QuestionNameToPicProps) {
     useEffect(()=>{
         if (imagesLoaded===4) {
             setImagesLoaded(0);
-            props.onLoad();
         }
     }, [imagesLoaded])
 
@@ -31,9 +30,10 @@ export function QuestionNameToPic(props: QuestionNameToPicProps) {
                     const name = props.pokemons?.[index]?.name;
                     return (
                         <Button
+                            display={props.isOnBreak?"none":""}
                             key={index}
                             color={props.isAnwsered ?
-                                (props.pokemons![index].name === props.correctPoke!.name ? "green2" : "red2") :
+                                (name === props.correctPoke?.name ? "green2" : "red2") :
                                 "primary"}
                             onClick={() => props.onClick(name!)}
                         >

@@ -4,11 +4,11 @@ import Image from "next/image";
 
 interface QuestionPicToNameProps {
     isAnwsered?: boolean;
+    isOnBreak: boolean;
     questionNb: number;
     correctPoke: Pokemon | null;
     pokemons: Pokemon[] | null;
     onClick: (pokemon: string) => void;
-    onLoad: () => void;
 }
 
 export function QuestionPicToName(props: QuestionPicToNameProps) {
@@ -18,7 +18,6 @@ export function QuestionPicToName(props: QuestionPicToNameProps) {
             <Text className="text-shadow">{`${props.questionNb}. Who is that Pokemon ?`}</Text>
             {props.correctPoke ?
                 <Image
-                    onLoad={props.onLoad}
                     src={`${process.env.NEXT_PUBLIC_POKESPRITE_URL}${props.correctPoke.id}.png`}
                     alt="pokepic"
                     width={150}
@@ -30,9 +29,10 @@ export function QuestionPicToName(props: QuestionPicToNameProps) {
                     const name = props.pokemons?.[index]?.name;
                     return (
                         <Button 
+                            display={props.isOnBreak?"none":""}
                             key={index}
                             color={props.isAnwsered?
-                                (props.pokemons![index].name===props.correctPoke!.name?"green2":"red2"):
+                                (name===props.correctPoke?.name?"green2":"red2"):
                                 "primary"} 
                             onClick={() => props.onClick(name!)}
                         >
