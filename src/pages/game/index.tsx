@@ -1,10 +1,12 @@
+"use client"
+import { ButtonAnimation } from "@/components/ButtonAnimation";
 import { FilledActionIcon } from "@/components/FilledActionIcon";
 import { GameTimer } from "@/components/GameTimer";
 import { LifeBar } from "@/components/LifeBar";
 import { QuestionNameToPic } from "@/components/QuestionNameToPic";
 import { QuestionPicToName } from "@/components/QuestionPicToName";
 import { useGamePlay } from "@/hooks/useGameplay";
-import { ActionIcon, Affix, Group, Stack } from "@mantine/core";
+import { Affix, Group, Stack } from "@mantine/core";
 import { IconBoxMultiple2, IconRefresh } from "@tabler/icons-react";
 
 export default function Game() {
@@ -40,22 +42,24 @@ export default function Game() {
                     />
                     <Affix position={{ right: 40, top: 200 }} zIndex={1}>
                         <Stack>
-                            <FilledActionIcon
-                                onClick={() => handlers.setIsSkipedBonus(true)}
-                                disabled={values.isSkipedBonus === false}
-                                color="primary"
-                                size={100}
-                            >
-                                <IconRefresh size={100} color={values.isSkipedBonus === false?"lightgray":"black"} />
-                            </FilledActionIcon>
-                            <FilledActionIcon
-                                onClick={() => handlers.setIsFiftyFifty(handlers.getTwoRandPoke())}
-                                disabled={values.isFiftyFifty[0] !== -1}
-                                color="tertiary"
-                                size={100}
-                            >
-                                <IconBoxMultiple2 size={100} color={values.isFiftyFifty[0] !== -1?"lightgray":"black"} />
-                            </FilledActionIcon>
+                            <ButtonAnimation delay={1}>
+                                <FilledActionIcon
+                                    onClick={() => handlers.setIsSkipedBonus(true)}
+                                    disabled={values.isSkipedBonus === false}
+                                    color="primary"
+                                    size={100}
+                                >
+                                    <IconRefresh size={100} color={values.isSkipedBonus === false ? "lightgray" : "black"} />
+                                </FilledActionIcon>
+                            </ButtonAnimation>
+                                <FilledActionIcon
+                                    onClick={() => handlers.setIsFiftyFifty(handlers.getTwoRandPoke())}
+                                    disabled={values.isFiftyFifty[0] !== -1}
+                                    color="tertiary"
+                                    size={100}
+                                >
+                                    <IconBoxMultiple2 size={100} color={values.isFiftyFifty[0] !== -1 ? "lightgray" : "black"} />
+                                </FilledActionIcon>
                         </Stack>
                     </Affix>
                 </Group>

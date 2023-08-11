@@ -1,10 +1,11 @@
+"use client"
+import { ResultsButtons } from "@/components/ResultsButtons";
 import { SummaryCard } from "@/components/SummaryCard";
 import { useUser } from "@/hooks/useUser";
 import { PokemonData } from "@/types/PokemonData";
 import { addOrUpdatePokedex } from "@/utils/supabase";
-import { Button, Group, SimpleGrid, Stack, Title } from "@mantine/core";
+import { SimpleGrid, Stack, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -50,24 +51,7 @@ export default function Results() {
     })
 
     return (
-        <Stack spacing={10}>
-            <Group grow spacing={2}>
-                <Link href="/game" style={{display: "block", width:"100%"}}>
-                    <Button w="100%" color="primary">
-                        Play Again
-                    </Button>
-                </Link>
-                <Link href="/session" style={{display: "block", width:"100%"}}>
-                    <Button w="100%" color="secondary">
-                        Home
-                    </Button>
-                </Link>
-                <Link href="/pokedex" style={{display: "block", width:"100%"}}>
-                    <Button w="100%" color="tertiary">
-                        Pokedex
-                    </Button>
-                </Link>
-            </Group>
+        <Stack spacing="xs" h="100%" justify="space-between">
             <Title className="text-shadow" ta="center">{!hasLost ? `VICTORY (${totalScore})` : "DEFEAT"} </Title>
             <SimpleGrid cols={4} spacing={20}>
                 {Array.from({ length: 20 }).map((_, index) => {
@@ -77,6 +61,7 @@ export default function Results() {
                     )
                 })}
             </SimpleGrid>
+            <ResultsButtons />
         </Stack>
     )
 }

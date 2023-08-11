@@ -1,3 +1,5 @@
+"use client"
+import { ButtonAnimation } from "@/components/ButtonAnimation";
 import { FilledActionIcon } from "@/components/FilledActionIcon";
 import { PokedexModal } from "@/components/PokedexModal";
 import { ProfilePicture } from "@/components/ProfilePicture";
@@ -18,8 +20,8 @@ import { useEffect, useState } from "react";
 export default function Pokedex() {
     const router = useRouter()
     //get userData
-    const {user} = useUser(()=>{}, ()=>router.push('/'))
-    const [currentUser, setCurrentUser] = useState<UserInfos|null>(null);
+    const { user } = useUser(() => { }, () => router.push('/'))
+    const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
     const [pokedex, setPokedex] = useState<PokedexCompleteData[] | null>(null)
     //Dynamic refresh
     const [selectedGen, setSelectedGen] = useState(1);
@@ -29,7 +31,7 @@ export default function Pokedex() {
     const [selectedPokeWiki, setSelectedPokeWiki] = useState<PokemonWiki>();
     //pokedex modal handler
     const [opened, modalHandlers] = useDisclosure();
-    
+
     const genSizes = [151, 100, 135, 113, 92, 72, 88, 96, 105] //9 generations in
     const pokemonPerPage = 20;
 
@@ -48,7 +50,7 @@ export default function Pokedex() {
 
     //set currentUser and pokedex
     useEffect(() => {
-        if (user.userId?.length&& user.userInfos && !pokedex && !currentUser) {
+        if (user.userId?.length && user.userInfos && !pokedex && !currentUser) {
             fetchUserPokedex(user.userId).then(setPokedex);
             setCurrentUser(user.userInfos);
         }
@@ -69,7 +71,7 @@ export default function Pokedex() {
                     <ProfilePicture
                         size={100}
                         onBadgeClick={() => { }}
-                        userInfos={currentUser} 
+                        userInfos={currentUser}
                     />
                     <Text className="text-shadow">{currentUser?.username}'s Pokedex</Text>
                 </Group>
@@ -126,11 +128,13 @@ export default function Pokedex() {
                 </Stack>
             </Affix>
             <Affix position={{ bottom: 0, left: 0 }} p="xs" zIndex="1">
-                <Link href="/session">
-                    <FilledActionIcon color="secondary" size={50}>
-                        <IconHome2 size={40} color="black"/>
-                    </FilledActionIcon>
-                </Link>
+                <ButtonAnimation>
+                    <Link href="/session">
+                        <FilledActionIcon color="secondary" size={50}>
+                            <IconHome2 size={40} color="black" />
+                        </FilledActionIcon>
+                    </Link>
+                </ButtonAnimation>
             </Affix>
         </>
     )
