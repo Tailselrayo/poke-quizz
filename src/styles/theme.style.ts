@@ -14,6 +14,11 @@ const theme: any = {
       -2px 8px black, 0px 8px black, 2px 8px black
       `,
     },
+    '.inner-border' : {
+      paddingBottom: 8,
+      border: '4px solid rgba(0, 0, 0, 0.5)',
+      boxShadow: '0px -8px 0px 0px rgba(0, 0, 0, 0.5) inset',
+    } ,
     '.logreg-text-input': {
       border: 0,
       label: {
@@ -50,6 +55,7 @@ const theme: any = {
     '.mantine-Button-root:disabled': {
       border: '4px solid rgba(0, 0, 0, 0.5)',
       boxShadow: '0px -8px 0px 0px rgba(0, 0, 0, 0.5) inset',
+      color: 't.colors.gray[5]'
     },
     '.mantine-Button-label': {
       padding: 5,
@@ -70,7 +76,7 @@ const theme: any = {
       defaultProps: {
         fz: 'md',
         radius: 'md',
-        className: 'text-shadow',
+        className: 'text-shadow inner-border',
       },
     },
   },
