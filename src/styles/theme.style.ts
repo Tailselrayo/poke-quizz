@@ -14,11 +14,11 @@ const theme: any = {
       -2px 8px black, 0px 8px black, 2px 8px black
       `,
     },
-    '.inner-border' : {
+    '.inner-border': {
       paddingBottom: 8,
       border: '4px solid rgba(0, 0, 0, 0.5)',
       boxShadow: '0px -8px 0px 0px rgba(0, 0, 0, 0.5) inset',
-    } ,
+    },
     '.logreg-text-input': {
       border: 0,
       label: {
@@ -36,7 +36,7 @@ const theme: any = {
     '.mantine-Modal-body': {
       height: '100%',
     },
-    '.mantine-PasswordInput-visibilityToggle' : {
+    '.mantine-PasswordInput-visibilityToggle': {
       color: t.colors.black2[0],
     },
     '.mantine-Modal-overlay': {
@@ -46,6 +46,9 @@ const theme: any = {
       padding: 0,
       display: 'flex',
       alignItems: 'center',
+    },
+    '.mantine-ActionIcon-root:disabled' : {
+      border: '4px solid rgba(0, 0, 0, 0.5)',
     },
     '.mantine-Button-root': {
       minHeight: '113px',

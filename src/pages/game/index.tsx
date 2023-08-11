@@ -1,3 +1,4 @@
+import { FilledActionIcon } from "@/components/FilledActionIcon";
 import { GameTimer } from "@/components/GameTimer";
 import { LifeBar } from "@/components/LifeBar";
 import { QuestionNameToPic } from "@/components/QuestionNameToPic";
@@ -39,24 +40,22 @@ export default function Game() {
                     />
                     <Affix position={{ right: 40, top: 200 }} zIndex={1}>
                         <Stack>
-                            <ActionIcon
+                            <FilledActionIcon
                                 onClick={() => handlers.setIsSkipedBonus(true)}
                                 disabled={values.isSkipedBonus === false}
-                                variant="filled"
-                                color="yellow.3"
+                                color="primary"
                                 size={100}
                             >
                                 <IconRefresh size={100} color={values.isSkipedBonus === false?"lightgray":"black"} />
-                            </ActionIcon>
-                            <ActionIcon
+                            </FilledActionIcon>
+                            <FilledActionIcon
                                 onClick={() => handlers.setIsFiftyFifty(handlers.getTwoRandPoke())}
                                 disabled={values.isFiftyFifty[0] !== -1}
-                                variant="filled"
-                                color="yellow.3"
+                                color="tertiary"
                                 size={100}
                             >
                                 <IconBoxMultiple2 size={100} color={values.isFiftyFifty[0] !== -1?"lightgray":"black"} />
-                            </ActionIcon>
+                            </FilledActionIcon>
                         </Stack>
                     </Affix>
                 </Group>

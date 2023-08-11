@@ -1,3 +1,4 @@
+import { FilledActionIcon } from "@/components/FilledActionIcon";
 import { PokedexModal } from "@/components/PokedexModal";
 import { ProfilePicture } from "@/components/ProfilePicture";
 import { useUser } from "@/hooks/useUser";
@@ -72,8 +73,8 @@ export default function Pokedex() {
                     />
                     <Text className="text-shadow">{currentUser?.username}'s Pokedex</Text>
                 </Group>
-                <Tabs defaultValue="g1">
-                    <Tabs.List onClick={() => console.log(genSizes.slice(0, selectedGen - 1))} position="center">
+                <Tabs defaultValue="g1" value={`g${selectedGen}`} variant="outline">
+                    <Tabs.List position="center">
                         {Array.from({ length: 9 }).map((_, index) => {
                             return (
                                 <Tabs.Tab
@@ -125,10 +126,10 @@ export default function Pokedex() {
                 </Stack>
             </Affix>
             <Affix position={{ bottom: 0, left: 0 }} p="xs" zIndex="1">
-                <Link href="/">
-                    <ActionIcon color="gray.1" size={40}>
-                        <IconHome2 size={40} />
-                    </ActionIcon>
+                <Link href="/session">
+                    <FilledActionIcon color="secondary" size={50}>
+                        <IconHome2 size={40} color="black"/>
+                    </FilledActionIcon>
                 </Link>
             </Affix>
         </>
