@@ -74,8 +74,8 @@ export default function Home() {
         </Stack>
       </Stack>
       <Affix position={{ right: 0, bottom: 0 }} p="xs" zIndex={1}>
-        <ActionIcon onClick={onSignOut} color="yellow" size={50}>
-            <IconLogout color="yellow" size={50} />
+        <ActionIcon onClick={onSignOut} color="gray" size={60}>
+            <IconLogout color="yellow" size={40} />
         </ActionIcon>
       </Affix>
       <Affix position={{ left: 0, bottom: 0 }} p="xs" zIndex={1}>

@@ -9,11 +9,14 @@ interface QuestionNameToPicProps {
     questionNb: number;
     correctPoke: Pokemon | null;
     pokemons: Pokemon[] | null;
+    fiftyFifty: number[];
     onClick: (pokemon: string) => void;
 }
 
 export function QuestionNameToPic(props: QuestionNameToPicProps) {
     const [imagesLoaded, setImagesLoaded] = useState(0);
+    const fiftyOn = props.fiftyFifty.length>1;
+    const fiftyTab = props.fiftyFifty;
 
     useEffect(()=>{
         if (imagesLoaded===4) {
@@ -32,6 +35,7 @@ export function QuestionNameToPic(props: QuestionNameToPicProps) {
                         <Button
                             display={props.isOnBreak?"none":""}
                             key={index}
+                            disabled={fiftyOn&&fiftyTab.includes(index)}
                             color={props.isAnwsered ?
                                 (name === props.correctPoke?.name ? "green2" : "red2") :
                                 "primary"}
