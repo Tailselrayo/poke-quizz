@@ -1,3 +1,4 @@
+import { FilledActionIcon } from '@/components/FilledActionIcon'
 import { GensSelectionModal } from '@/components/GensSelectorModal'
 import { ImageSelectModal } from '@/components/ImageSelectModal'
 import { InformationBox } from '@/components/InformationBox'
@@ -5,7 +6,7 @@ import { ProfilePicture } from '@/components/ProfilePicture'
 import { useBadges } from '@/hooks/useBadges'
 import { useUser } from '@/hooks/useUser'
 import { signOut } from '@/utils/supabase'
-import { ActionIcon, Affix, Button, Group, Loader, Stack } from '@mantine/core'
+import {  Affix, Button, Group, Loader, Stack } from '@mantine/core'
 import { useDisclosure, useLocalStorage } from '@mantine/hooks'
 import { IconLogout, IconSettings } from '@tabler/icons-react'
 import Link from 'next/link'
@@ -74,14 +75,14 @@ export default function Home() {
         </Stack>
       </Stack>
       <Affix position={{ right: 0, bottom: 0 }} p="xs" zIndex={1}>
-        <ActionIcon onClick={onSignOut} color="gray" size={60}>
-            <IconLogout color="yellow" size={40} />
-        </ActionIcon>
+        <FilledActionIcon onClick={onSignOut} color="secondary" size={60}>
+            <IconLogout color="black" size={50} />
+        </FilledActionIcon>
       </Affix>
       <Affix position={{ left: 0, bottom: 0 }} p="xs" zIndex={1}>
-        <ActionIcon onClick={modalHandlers.open} color="white" size={50}>
-            <IconSettings color="white " size={50} />
-        </ActionIcon>
+        <FilledActionIcon onClick={modalHandlers.open} color="tertiary" size={60}>
+            <IconSettings color="black" size={50} />
+        </FilledActionIcon>
       </Affix>
     </>
   )

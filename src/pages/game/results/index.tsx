@@ -51,22 +51,13 @@ export default function Results() {
 
     return (
         <Stack spacing={10}>
-            <Title className="text-shadow" ta="center">{!hasLost ? `VICTORY (${totalScore})` : "DEFEAT"} </Title>
-            <SimpleGrid cols={4} spacing={20}>
-                {Array.from({ length: 20 }).map((_, index) => {
-                    const cardData = anwserStorage?.[index];
-                    return (
-                        <SummaryCard key={index} data={cardData} cardIndex={index + 1} />
-                    )
-                })}
-            </SimpleGrid>
             <Group grow spacing={2}>
                 <Link href="/game" style={{display: "block", width:"100%"}}>
                     <Button w="100%" color="primary">
                         Play Again
                     </Button>
                 </Link>
-                <Link href="/" style={{display: "block", width:"100%"}}>
+                <Link href="/session" style={{display: "block", width:"100%"}}>
                     <Button w="100%" color="secondary">
                         Home
                     </Button>
@@ -77,6 +68,15 @@ export default function Results() {
                     </Button>
                 </Link>
             </Group>
+            <Title className="text-shadow" ta="center">{!hasLost ? `VICTORY (${totalScore})` : "DEFEAT"} </Title>
+            <SimpleGrid cols={4} spacing={20}>
+                {Array.from({ length: 20 }).map((_, index) => {
+                    const cardData = anwserStorage?.[index];
+                    return (
+                        <SummaryCard key={index} data={cardData} cardIndex={index + 1} />
+                    )
+                })}
+            </SimpleGrid>
         </Stack>
     )
 }

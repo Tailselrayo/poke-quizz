@@ -1,5 +1,5 @@
-import { ActionIcon, Stack } from "@mantine/core";
 import { IconInfoSquare } from "@tabler/icons-react";
+import { FilledActionIcon } from "./FilledActionIcon";
 
 interface InformationBoxProps {
 
@@ -8,9 +8,9 @@ interface InformationBoxProps {
 export function InformationBox(props: InformationBoxProps) {
     return (
 
-        <ActionIcon c="primary" size={50}>
-            <IconInfoSquare size={50} />
-        </ActionIcon>
+        <FilledActionIcon color="primary" size={60}>
+            <IconInfoSquare color="black" size={50} />
+        </FilledActionIcon>
 
     )
 }

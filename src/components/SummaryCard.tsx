@@ -10,9 +10,9 @@ export function SummaryCard(props: SummaryCardProps) {
     const data = props.data;
     return (
         <Card 
+            className="inner-border"
             bg={data ? (data.score !== 0 ? "green2" : "red2") : "rgba(200,200,200,1)"}
             w={250}
-            h={60}
             p={0}
         >
             <Stack spacing={1} p={1}>
