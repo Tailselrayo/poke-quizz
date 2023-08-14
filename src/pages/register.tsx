@@ -1,3 +1,4 @@
+"use client"
 import { LogRegWindow } from "@/components/LogRegWindow";
 import { useLogReg } from "@/hooks/useLogReg";
 import { useUser } from "@/hooks/useUser";

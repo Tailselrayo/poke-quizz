@@ -1,6 +1,7 @@
 import { Button, Group, PasswordInput, Stack, TextInput, Title, Text } from "@mantine/core";
 import Link from "next/link";
-import { FormEvent} from "react";
+import { FormEvent } from "react";
+import { ButtonAnimation } from "./ButtonAnimation";
 
 interface LogRegWindowProps {
     isLogin?: boolean;
@@ -15,7 +16,7 @@ interface LogRegWindowProps {
     setEmail: (value: string) => void;
     setUsername: (value: string) => void;
     setPassword: (value: string) => void;
-    setConfirmPassword?: (value: string)=> void;
+    setConfirmPassword?: (value: string) => void;
     onSubmit: () => void;
 }
 
@@ -24,7 +25,7 @@ export function LogRegWindow(props: LogRegWindowProps) {
     const onSubmit = (e: FormEvent) => {
         e.preventDefault();
         props.onSubmit();
-    
+
     }
 
     return (
@@ -39,7 +40,7 @@ export function LogRegWindow(props: LogRegWindowProps) {
                             label={<Text fz="xs">email</Text>}
                             value={props.email}
                             onChange={(e) => props.setEmail(e.target.value)}
-                            error={props.isLogError?"Wrong email":(props.isRegError?"Email already have an account":"")}
+                            error={props.isLogError ? "Wrong email" : (props.isRegError ? "Email already have an account" : "")}
                         />
                         <TextInput
                             label={<Text fz="xs">username</Text>}
@@ -52,13 +53,13 @@ export function LogRegWindow(props: LogRegWindowProps) {
                             label={<Text fz="xs">password</Text>}
                             value={props.password}
                             onChange={(e) => props.setPassword(e.target.value)}
-                            error={!props.arePWEq?"The fields must have the same passwords":(props.isPWError?"Wrong password":"")}
+                            error={!props.arePWEq ? "The fields must have the same passwords" : (props.isPWError ? "Wrong password" : "")}
                         />
                         <PasswordInput
                             display={props.isLogin ? "none" : ""}
                             label={<Text fz="xs">confirm password</Text>}
                             value={props.confirmPassword}
-                            onChange={(e)=>props.setConfirmPassword!(e.target.value)}
+                            onChange={(e) => props.setConfirmPassword!(e.target.value)}
                             error={!props.arePWEq}
                         />
                     </Stack>
@@ -66,7 +67,9 @@ export function LogRegWindow(props: LogRegWindowProps) {
                         <Link href={props.isLogin ? "/register" : "/login"} style={{ textDecoration: "none" }}>
                             <Text fz="xs" color="blue.6" ta="center">{props.isLogin ? "register" : "login"}</Text>
                         </Link>
-                        <Button type="submit" color="primary" >Submit</Button>
+                        <ButtonAnimation>
+                            <Button type="submit" color="primary" >Submit</Button>
+                        </ButtonAnimation>
                     </Group>
                 </Stack>
             </form>

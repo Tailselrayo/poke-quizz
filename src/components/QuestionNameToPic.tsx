@@ -1,10 +1,10 @@
 import { Pokemon } from "@/types/Pokemon";
 import { Button, SimpleGrid, Stack, Text } from "@mantine/core";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { ButtonAnimation } from "./ButtonAnimation";
 
 interface QuestionNameToPicProps {
-    isAnwsered?: boolean;
+    isAnwsered: boolean;
     isOnBreak: boolean;
     questionNb: number;
     correctPoke: Pokemon | null;
@@ -14,44 +14,42 @@ interface QuestionNameToPicProps {
 }
 
 export function QuestionNameToPic(props: QuestionNameToPicProps) {
-    const [imagesLoaded, setImagesLoaded] = useState(0);
-    const fiftyOn = props.fiftyFifty.length>1;
+    const fiftyOn = props.fiftyFifty.length > 1;
     const fiftyTab = props.fiftyFifty;
 
-    useEffect(()=>{
-        if (imagesLoaded===4) {
-            setImagesLoaded(0);
+    const onClick = (name: string) => {
+        if (!props.isAnwsered) {
+            props.onClick(name);
         }
-    }, [imagesLoaded])
+    }
 
     return (
         <Stack align="center" justify="center">
-            <Text className="text-shadow">{`${props.questionNb}. Who is that Pokemon : ${props.correctPoke?.name}`}</Text>
-
+            <Text className="text-shadow">{`${props.questionNb}. Who is that Pokemon : ${props.correctPoke?.name??""}`}</Text>
             <SimpleGrid cols={2} spacing={30}>
                 {Array.from({ length: 4 }).map((_, index) => {
                     const name = props.pokemons?.[index]?.name;
-                    return (
-                        <Button
-                            display={props.isOnBreak?"none":""}
-                            key={index}
-                            disabled={fiftyOn&&fiftyTab.includes(index)}
-                            color={props.isAnwsered ?
-                                (name === props.correctPoke?.name ? "green2" : "red2") :
-                                "primary"}
-                            onClick={() => props.onClick(name!)}
-                        >
-                            {props.pokemons ?
-                                <Image
-                                    onLoad={()=>setImagesLoaded((s)=>s+1)}
-                                    src={`${process.env.NEXT_PUBLIC_POKESPRITE_URL}${props.pokemons[index].id}.png`}
-                                    alt="pokepic"
-                                    width={120}
-                                    height={120}
-                                /> : <></>
-                            }
-                        </Button>
-                    )
+                        return (
+                            <ButtonAnimation key={index} mounted={!props.isOnBreak}>
+                                <Button
+                                    disabled={fiftyOn && fiftyTab.includes(index)}
+                                    color={props.isAnwsered ?
+                                        (name === props.correctPoke?.name ? "green2" : "red2") :
+                                        "primary"}
+                                    onClick={() => onClick(name!)}
+                                >
+                                    {props.pokemons ?
+                                        <Image
+                                            src={`${process.env.NEXT_PUBLIC_POKESPRITE_URL}${props.pokemons[index].id}.png`}
+                                            alt="pokepic"
+                                            width={120}
+                                            height={120}
+                                        /> : <></>
+                                    }
+                                </Button>
+                            </ButtonAnimation>
+                        )
+                    
                 })}
             </SimpleGrid>
         </Stack>

@@ -43,7 +43,7 @@ export function useGamePlay() {
         else {
             setAnwserSummary((summary) => summary.concat([{ pokemon: correctPoke!.name, id: correctPoke!.id, score: Math.round(timer * 100) }]))
         }
-
+        setTimeout(()=>setIsOnBreak(true),500);
         setTimeout(nextQuestion, 1000);
     }
 
@@ -53,7 +53,7 @@ export function useGamePlay() {
         }
         setIsAnwsered(false)
         setPokePicker(undefined)
-        setPokemons(null);
+        setCorrectPoke(null);
         setQuestionPicker(Math.random());
     }
 
@@ -90,19 +90,18 @@ export function useGamePlay() {
 
     //refill of pokemons each question and init all revelant variables
     useEffect(() => {
-        if (!pokemons && selectedGens) {
+        if (!correctPoke && selectedGens) {
             const randomNb = ~~(Math.random()*4);
             setPokePicker(randomNb);
             getPokemons(selectedGens)
                 .then((data) => {
                     setPokemons(data)
                     setCorrectPoke(data[randomNb])
-                    setIsOnBreak(true)
                     setTimer(initTimer);
                     breakInterval.start();
                 });
         }
-    }, [pokemons, selectedGens])
+    }, [correctPoke, selectedGens])
 
     //empty local storage at the start of each new game
     useEffect(() => {
