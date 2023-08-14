@@ -2,10 +2,9 @@ import { Pokemon } from "@/types/Pokemon";
 import { Button, SimpleGrid, Stack, Text } from "@mantine/core";
 import Image from "next/image";
 import { ButtonAnimation } from "./ButtonAnimation";
-import { useState, useEffect } from "react";
 
 interface QuestionPicToNameProps {
-    isAnwsered?: boolean;
+    isAnwsered: boolean;
     isOnBreak: boolean;
     questionNb: number;
     correctPoke: Pokemon | null;
@@ -17,6 +16,12 @@ interface QuestionPicToNameProps {
 export function QuestionPicToName(props: QuestionPicToNameProps) {
     const fiftyOn = props.fiftyFifty.length > 1;
     const fiftyTab = props.fiftyFifty;
+
+    const onClick = (name: string) => {
+        if (!props.isAnwsered) {
+            props.onClick(name);
+        }
+    }
 
     return (
         <Stack align="center" justify="center">
@@ -40,7 +45,7 @@ export function QuestionPicToName(props: QuestionPicToNameProps) {
                                     color={props.isAnwsered ?
                                         (name === props.correctPoke?.name ? "green2" : "red2") :
                                         "primary"}
-                                    onClick={() => props.onClick(name!)}
+                                    onClick={() => onClick(name!)}
                                 >
                                     {name}
                                 </Button>

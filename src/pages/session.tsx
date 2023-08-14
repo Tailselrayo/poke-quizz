@@ -4,6 +4,7 @@ import { FilledActionIcon } from '@/components/FilledActionIcon'
 import { GensSelectionModal } from '@/components/GensSelectorModal'
 import { ImageSelectModal } from '@/components/ImageSelectModal'
 import { InformationBox } from '@/components/InformationBox'
+import { InformationBoxModal } from '@/components/InformationBoxModal'
 import { ProfilePicture } from '@/components/ProfilePicture'
 import { useBadges } from '@/hooks/useBadges'
 import { useUser } from '@/hooks/useUser'
@@ -17,7 +18,10 @@ import router from 'next/router'
 export default function Home() {
   //store difficulty selection
   const [selectedGens, setSelectedGens] = useLocalStorage<number[]>({ key: "genStorage", defaultValue: [1] })
+  //gen selection modal
   const [opened, modalHandlers] = useDisclosure();
+  //Information Box modal
+  const [openedIB, modalHandlersIB] = useDisclosure();
   //hook getting user id
   const { user, userHandlers } = useUser(() => { }, () => router.push('/'));
   //hook handling badges
@@ -54,6 +58,10 @@ export default function Home() {
         onClose={modalHandlers.close}
         onSave={setSelectedGens}
       />
+      <InformationBoxModal 
+        opened={openedIB}
+        onClose={modalHandlersIB.close}
+      />
       <Stack p={0}>
         <Group w="100%" position="apart" align="start" p={0}>
           <ProfilePicture
@@ -61,7 +69,7 @@ export default function Home() {
             onBadgeClick={badgesHandlers.onBadgeClick}
             isOnHome={true}
             userInfos={user.userInfos} />
-          <InformationBox />
+          <InformationBox onClick={modalHandlersIB.open}/>
         </Group>
         <Stack w="40%" mx="auto" align="center" spacing={2}>
           <Link href="/game" style={{ display: "block", width: "100%" }}>

@@ -1,8 +1,8 @@
-import { ButtonProps } from "@mantine/core";
+import { Button, ButtonProps } from "@mantine/core";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
-interface ButtonAnimationProps extends ButtonProps{
+interface ButtonAnimationProps extends ButtonProps {
     children: ReactNode;
     delay?: number;
     mounted?: boolean;
@@ -20,16 +20,18 @@ export function ButtonAnimation(props: ButtonAnimationProps) {
         },
     }
 
-    return(
+    return (
         <motion.div
             variants={button}
             initial="disappear"
-            animate={props.mounted!==false?"appear":"disappear"}
+            animate={props.mounted !== false ? "appear" : "disappear"}
             transition={{
                 delay: props.delay,
-                scale: {type: "spring", bounce: 0.4,},
-                rotate: {type: "spring", bounce: 0.7},
+                scale: { type: "spring", bounce: 0.4, },
+                rotate: { type: "spring", bounce: 0.7 },
             }}
-        >{props.children}</motion.div>
+        >
+            {props.children}
+        </motion.div>
     )
 }

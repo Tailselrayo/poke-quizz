@@ -60,12 +60,14 @@ export function GensSelectionModal(props: GenSelectorModalProps) {
                         <Group w="100%" grow>
                             <ButtonAnimation>
                                 <Button
+                                    w="100%"
                                     onClick={onCancel}
                                     color="secondary"
                                 >Cancel</Button>
                             </ButtonAnimation>
                             <ButtonAnimation>
                                 <Button
+                                    w="100%"
                                     onClick={() => onSave(activeSelection)}
                                     color="primary"
                                 >Save</Button>

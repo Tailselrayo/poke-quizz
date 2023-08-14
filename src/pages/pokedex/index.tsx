@@ -85,7 +85,7 @@ export default function Pokedex() {
                                     value={`g${index + 1}`}
                                     px="xs"
                                 >
-                                    Gen.{index + 1}
+                                    <Text>Gen.{index + 1}</Text>
                                 </Tabs.Tab>
                             )
                         })}
@@ -106,6 +106,7 @@ export default function Pokedex() {
                                                     alt={`${pokemonId}`}
                                                     height={100}
                                                     width={100}
+                                                    style={{cursor: "pointer"}}
                                                 /> :
                                                 <IconQuestionMark key={index2} color="white" size={100} />
                                         )

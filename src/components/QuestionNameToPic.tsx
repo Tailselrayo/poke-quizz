@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ButtonAnimation } from "./ButtonAnimation";
 
 interface QuestionNameToPicProps {
-    isAnwsered?: boolean;
+    isAnwsered: boolean;
     isOnBreak: boolean;
     questionNb: number;
     correctPoke: Pokemon | null;
@@ -16,6 +16,12 @@ interface QuestionNameToPicProps {
 export function QuestionNameToPic(props: QuestionNameToPicProps) {
     const fiftyOn = props.fiftyFifty.length > 1;
     const fiftyTab = props.fiftyFifty;
+
+    const onClick = (name: string) => {
+        if (!props.isAnwsered) {
+            props.onClick(name);
+        }
+    }
 
     return (
         <Stack align="center" justify="center">
@@ -30,7 +36,7 @@ export function QuestionNameToPic(props: QuestionNameToPicProps) {
                                     color={props.isAnwsered ?
                                         (name === props.correctPoke?.name ? "green2" : "red2") :
                                         "primary"}
-                                    onClick={() => props.onClick(name!)}
+                                    onClick={() => onClick(name!)}
                                 >
                                     {props.pokemons ?
                                         <Image
